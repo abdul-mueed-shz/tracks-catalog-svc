@@ -20,5 +20,5 @@ public class User extends BaseEntity {
 
     @Column(name = "is_artist", nullable = false)
     @ColumnDefault("false")
-    private boolean isArtist = false;
+    private boolean artist = false;
 }
