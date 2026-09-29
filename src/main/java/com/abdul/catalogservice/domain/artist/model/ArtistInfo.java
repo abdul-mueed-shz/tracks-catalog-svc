@@ -1,19 +1,13 @@
 package com.abdul.catalogservice.domain.artist.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.abdul.catalogservice.domain.artist.common.model.BaseInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Getter
-@Builder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-@AllArgsConstructor
-public class ArtistInfo {
-    private Long id;
+public class ArtistInfo extends BaseInfo {
     private String name;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }
