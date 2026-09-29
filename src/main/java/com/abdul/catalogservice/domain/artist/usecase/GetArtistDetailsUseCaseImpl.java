@@ -11,6 +11,6 @@ public class GetArtistDetailsUseCaseImpl implements GetArtistDetailsUseCase {
 
     @Override
     public ArtistInfo execute(Long artistId) {
-        return null;
+        return artistRepository.getArtistById(artistId);
     }
 }
