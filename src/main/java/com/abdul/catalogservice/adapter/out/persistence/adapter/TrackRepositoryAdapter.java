@@ -1,0 +1,16 @@
+package com.abdul.catalogservice.adapter.out.persistence.adapter;
+
+import com.abdul.catalogservice.domain.track.model.TrackInfo;
+import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public class TrackRepositoryAdapter implements TrackRepository {
+    @Override
+    public List<TrackInfo> getAllByArtistId(Long artistId) {
+        // TODO: Implement this method
+        return List.of();
+    }
+}
