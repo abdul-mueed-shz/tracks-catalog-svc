@@ -10,4 +10,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class UserInfo extends BaseInfo {
     private String name;
+    private boolean isArtist = false;
 }
