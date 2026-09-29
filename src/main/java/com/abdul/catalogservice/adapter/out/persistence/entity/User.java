@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "artists")
-public class Artist extends BaseEntity {
+@Table(name = "users")
+public class User extends BaseEntity {
     private String name;
 }

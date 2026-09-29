@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-class GetTracksByArtistUseCaseImplTest {
+class GetTracksByUserUseCaseImplTest {
 
     private final TrackRepository trackRepository = mock(TrackRepository.class);
-    private final GetTracksByArtistUseCaseImpl useCase =
-            new GetTracksByArtistUseCaseImpl(trackRepository);
+    private final GetTracksByUserUseCaseImpl useCase =
+            new GetTracksByUserUseCaseImpl(trackRepository);
 
     @Test
-    void returnsNoTracksForAnArtist() {
+    void returnsNoTracksForAUser() {
         assertThat(useCase.execute(1L)).isEmpty();
     }
 }

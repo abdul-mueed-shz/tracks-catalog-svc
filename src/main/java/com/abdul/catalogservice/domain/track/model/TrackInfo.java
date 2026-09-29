@@ -1,7 +1,7 @@
 package com.abdul.catalogservice.domain.track.model;
 
-import com.abdul.catalogservice.domain.artist.common.model.BaseInfo;
-import com.abdul.catalogservice.domain.artist.model.ArtistInfo;
+import com.abdul.catalogservice.domain.user.common.model.BaseInfo;
+import com.abdul.catalogservice.domain.user.model.UserInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public class TrackInfo extends BaseInfo {
-    private ArtistInfo artist;
+    private UserInfo user;
     private String title;
     private String genre;
     private Integer durationMs;

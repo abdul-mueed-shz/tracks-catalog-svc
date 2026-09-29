@@ -4,6 +4,6 @@ import com.abdul.catalogservice.domain.track.model.TrackInfo;
 
 import java.util.List;
 
-public interface GetTracksByArtistUseCase {
-    List<TrackInfo> execute(Long artistId);
+public interface GetTracksByUserUseCase {
+    List<TrackInfo> execute(Long userId);
 }

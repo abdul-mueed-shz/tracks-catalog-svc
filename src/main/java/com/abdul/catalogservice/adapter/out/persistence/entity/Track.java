@@ -15,12 +15,12 @@ import java.time.LocalDate;
 @Entity
 @Table(
         name = "tracks",
-        indexes = @Index(name = "idx_tracks_artist_id", columnList = "artist_id")
+        indexes = @Index(name = "idx_tracks_user_id", columnList = "user_id")
 )
 public class Track extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false)
-    private Artist artist;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private String title;

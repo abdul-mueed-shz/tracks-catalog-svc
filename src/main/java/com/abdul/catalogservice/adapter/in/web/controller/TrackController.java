@@ -1,7 +1,7 @@
 package com.abdul.catalogservice.adapter.in.web.controller;
 
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
-import com.abdul.catalogservice.domain.track.port.in.GetTracksByArtistUseCase;
+import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +15,10 @@ import java.util.List;
 @RequestMapping("/tracks")
 @RequiredArgsConstructor
 public class TrackController {
-    private final GetTracksByArtistUseCase getTracksByArtistUseCase;
+    private final GetTracksByUserUseCase getTracksByUserUseCase;
 
-    @GetMapping("/artist/{artistId}")
-    public ResponseEntity<List<TrackInfo>> getTracksByArtist(@PathVariable Long artistId) {
-        return ResponseEntity.ok(getTracksByArtistUseCase.execute(artistId));
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TrackInfo>> getTracksByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(getTracksByUserUseCase.execute(userId));
     }
 }

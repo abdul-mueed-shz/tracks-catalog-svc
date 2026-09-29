@@ -5,5 +5,5 @@ import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import java.util.List;
 
 public interface TrackRepository {
-    List<TrackInfo> getAllByArtistId(Long artistId);
+    List<TrackInfo> getAllByUserId(Long userId);
 }

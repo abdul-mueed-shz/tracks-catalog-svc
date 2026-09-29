@@ -1,6 +1,6 @@
-package com.abdul.catalogservice.domain.artist.model;
+package com.abdul.catalogservice.domain.user.model;
 
-import com.abdul.catalogservice.domain.artist.common.model.BaseInfo;
+import com.abdul.catalogservice.domain.user.common.model.BaseInfo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -8,6 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
-public class ArtistInfo extends BaseInfo {
+public class UserInfo extends BaseInfo {
     private String name;
 }

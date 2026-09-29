@@ -12,14 +12,14 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "artist_aliases",
-        indexes = @Index(name = "idx_artist_aliases_normalized_name", columnList = "normalized_name"),
-        uniqueConstraints = @UniqueConstraint(name = "uq_artist_alias", columnNames = {"artist_id", "normalized_name"})
+        name = "user_aliases",
+        indexes = @Index(name = "idx_user_aliases_normalized_name", columnList = "normalized_name"),
+        uniqueConstraints = @UniqueConstraint(name = "uq_user_alias", columnNames = {"user_id", "normalized_name"})
 )
-public class ArtistAlias extends BaseEntity {
+public class UserAlias extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "artist_id", nullable = false)
-    private Artist artist;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "alias_name", nullable = false)
     private String aliasName;

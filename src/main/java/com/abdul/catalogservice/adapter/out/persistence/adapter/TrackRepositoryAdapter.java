@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public class TrackRepositoryAdapter implements TrackRepository {
     @Override
-    public List<TrackInfo> getAllByArtistId(Long artistId) {
+    public List<TrackInfo> getAllByUserId(Long userId) {
         // TODO: Implement this method
         return List.of();
     }

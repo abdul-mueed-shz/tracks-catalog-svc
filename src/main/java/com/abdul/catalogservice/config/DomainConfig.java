@@ -1,30 +1,30 @@
 package com.abdul.catalogservice.config;
 
-import com.abdul.catalogservice.domain.artist.port.in.CreateArtistUseCase;
-import com.abdul.catalogservice.domain.artist.port.in.GetArtistDetailsUseCase;
-import com.abdul.catalogservice.domain.artist.port.out.ArtistRepository;
-import com.abdul.catalogservice.domain.artist.usecase.CreateArtistUseCaseImpl;
-import com.abdul.catalogservice.domain.artist.usecase.GetArtistDetailsUseCaseImpl;
-import com.abdul.catalogservice.domain.track.port.in.GetTracksByArtistUseCase;
+import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
+import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
+import com.abdul.catalogservice.domain.user.port.out.UserRepository;
+import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
+import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
+import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
 import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
-import com.abdul.catalogservice.domain.track.usecase.GetTracksByArtistUseCaseImpl;
+import com.abdul.catalogservice.domain.track.usecase.GetTracksByUserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DomainConfig {
     @Bean
-    public GetTracksByArtistUseCase getTracksByArtistUseCase(TrackRepository trackRepository) {
-        return new GetTracksByArtistUseCaseImpl(trackRepository);
+    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository) {
+        return new GetTracksByUserUseCaseImpl(trackRepository);
     }
 
     @Bean
-    public GetArtistDetailsUseCase getArtistDetailsUseCase(ArtistRepository artistRepository) {
-        return new GetArtistDetailsUseCaseImpl(artistRepository);
+    public GetUserDetailsUseCase getUserDetailsUseCase(UserRepository userRepository) {
+        return new GetUserDetailsUseCaseImpl(userRepository);
     }
 
     @Bean
-    public CreateArtistUseCase getCreateArtistUseCase(ArtistRepository artistRepository) {
-        return new CreateArtistUseCaseImpl(artistRepository);
+    public CreateUserUseCase getCreateUserUseCase(UserRepository userRepository) {
+        return new CreateUserUseCaseImpl(userRepository);
     }
 }
