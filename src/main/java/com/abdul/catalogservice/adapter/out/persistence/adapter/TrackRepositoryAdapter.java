@@ -1,8 +1,7 @@
 package com.abdul.catalogservice.adapter.out.persistence.adapter;
 
 import com.abdul.catalogservice.adapter.out.mapper.TrackMapper;
-import com.abdul.catalogservice.adapter.out.persistence.entity.Track;
-import com.abdul.catalogservice.adapter.out.persistence.pagination.KeysetPaginationSupport;
+import com.abdul.catalogservice.adapter.out.persistence.pagination.CursorPaginationSupport;
 import com.abdul.catalogservice.adapter.out.persistence.repository.TrackJpaRepository;
 import com.abdul.catalogservice.domain.common.model.PageInfo;
 import com.abdul.catalogservice.domain.common.model.PaginationInfo;
@@ -19,7 +18,7 @@ import java.util.List;
 public class TrackRepositoryAdapter implements TrackRepository {
     private final TrackJpaRepository trackJpaRepository;
     private final TrackMapper trackMapper;
-    private final KeysetPaginationSupport keysetPaginationSupport;
+    private final CursorPaginationSupport cursorPaginationSupport;
 
     @Override
     public List<TrackInfo> getAllByUserId(Long userId) {
@@ -28,7 +27,7 @@ public class TrackRepositoryAdapter implements TrackRepository {
 
     @Override
     public PageInfo<TrackInfo> getAllByUserId(Long userId, PaginationInfo paginationInfo, SortInfo trackSortInfo) {
-        return keysetPaginationSupport.execute(
+        return cursorPaginationSupport.execute(
                 paginationInfo,
                 trackSortInfo,
                 (position, limitAndSort) -> trackJpaRepository.findByUserId(

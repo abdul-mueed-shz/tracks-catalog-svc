@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class KeysetPaginationSupport {
+public class CursorPaginationSupport {
     private final CursorCodec cursorCodec;
 
     public <E, D> PageInfo<D> execute(
