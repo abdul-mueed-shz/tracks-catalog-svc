@@ -6,6 +6,7 @@ import com.abdul.catalogservice.domain.common.model.PageInfo;
 import com.abdul.catalogservice.domain.common.model.PaginationInfo;
 import com.abdul.catalogservice.domain.common.model.SortInfo;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
+import com.abdul.catalogservice.domain.track.model.TrackFilterInfo;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
 import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
 import jakarta.validation.Valid;
@@ -28,14 +29,14 @@ public class TrackController {
         return ResponseEntity.ok(addTrackUseCase.execute(userId, trackInfo));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping
     public ResponseEntity<PageInfo<TrackInfo>> getTracksByUser(
-            @PathVariable Long userId,
+            @ModelAttribute TrackFilterInfo filterInfo,
             @ModelAttribute PaginationInfo paginationInfo,
             @ModelAttribute SortInfo trackSortInfo
     ) {
         return ResponseEntity.ok(getTracksByUserUseCase.execute(
-                userId,
+                filterInfo,
                 paginationInfo,
                 trackSortInfo
         ));

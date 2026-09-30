@@ -9,10 +9,12 @@ import com.abdul.catalogservice.domain.common.model.SortInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.ScrollPosition;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Window;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -24,8 +26,10 @@ public class CursorPaginationSupport {
     public <E, D> PageInfo<D> execute(
             PaginationInfo paginationInfo,
             SortInfo sortInfo,
-            BiFunction<KeysetScrollPosition, LimitAndSort, Window<E>> query,
-            Function<E, D> mapper
+            BiFunction<KeysetScrollPosition, Query, List<E>> query,
+            Function<E, D> mapper,
+            Function<E, Object> sortValue,
+            Function<E, Object> idValue
     ) {
         int size = paginationInfo.getSize();
         Sort.Direction direction = sortInfo.getDirection() == SortDirection.ASC
@@ -34,22 +38,34 @@ public class CursorPaginationSupport {
         String property = sortInfo.getProperty() == null
                 ? SortProperty.UPDATED_AT.getProperty()
                 : sortInfo.getProperty();
-        LimitAndSort limitAndSort = new LimitAndSort(Limit.of(size), Sort.by(direction, property));
-        Window<E> window = query.apply(
-                cursorCodec.decodeCursor(paginationInfo.getCursor()),
-                limitAndSort
+        Query queryOptions = new Query(
+                Limit.of(size + 1),
+                Sort.by(direction, property),
+                property
         );
-        String nextCursor = window.hasNext()
-                ? cursorCodec.encodeCursor(window.positionAt(window.size() - 1))
-                : null;
-
+        List<E> results = query.apply(
+                cursorCodec.decodeCursor(paginationInfo.getCursor()),
+                queryOptions
+        );
+        boolean hasMore = results.size() > size;
+        List<E> content = hasMore ? results.subList(0, size) : results;
+        String nextCursor = null;
+        if (hasMore) {
+            E last = content.get(content.size() - 1);
+            nextCursor = cursorCodec.encodeCursor(ScrollPosition.forward(Map.of(
+                    property,
+                    sortValue.apply(last),
+                    "id",
+                    idValue.apply(last)
+            )));
+        }
         return PageInfo.<D>builder()
                 .cursor(nextCursor)
                 .size(size)
-                .data(window.getContent().stream().map(mapper).toList())
+                .data(content.stream().map(mapper).toList())
                 .build();
     }
 
-    public record LimitAndSort(Limit limit, Sort sort) {
+    public record Query(Limit limit, Sort sort, String property) {
     }
 }
