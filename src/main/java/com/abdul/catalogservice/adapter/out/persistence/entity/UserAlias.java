@@ -29,4 +29,8 @@ public class UserAlias extends BaseEntity {
 
     @Column(name = "is_primary")
     private Boolean isPrimary;
+
+    public void assignUser(User user) {
+        this.user = user;
+    }
 }

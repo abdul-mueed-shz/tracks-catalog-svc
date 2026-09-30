@@ -5,5 +5,7 @@ import com.abdul.catalogservice.domain.user.model.UserInfo;
 public interface UserRepository {
     UserInfo getUserById(Long id);
 
-    UserInfo upsertUser(UserInfo userInfo);
+    UserInfo createUser(UserInfo userInfo);
+
+    UserInfo updateUser(UserInfo userInfo);
 }

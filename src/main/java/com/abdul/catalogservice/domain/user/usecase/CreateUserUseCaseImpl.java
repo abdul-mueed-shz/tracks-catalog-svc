@@ -11,6 +11,6 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
 
     @Override
     public UserInfo execute(UserInfo userInfo) {
-        return userRepository.upsertUser(userInfo);
+        return userRepository.createUser(userInfo);
     }
 }

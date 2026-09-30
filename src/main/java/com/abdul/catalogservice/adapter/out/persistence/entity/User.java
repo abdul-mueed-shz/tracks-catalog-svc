@@ -1,13 +1,15 @@
 package com.abdul.catalogservice.adapter.out.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -20,5 +22,10 @@ public class User extends BaseEntity {
 
     @Column(name = "is_artist", nullable = false)
     @ColumnDefault("false")
+    @Builder.Default
     private boolean artist = false;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<UserAlias> aliases = new ArrayList<>();
 }
