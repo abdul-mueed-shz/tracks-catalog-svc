@@ -1,5 +1,8 @@
 package com.abdul.catalogservice.config;
 
+import com.abdul.catalogservice.domain.common.validation.UserValidator;
+import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
+import com.abdul.catalogservice.domain.track.usecase.AddTrackUseCaseImpl;
 import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.EditUserNameUseCase;
@@ -15,9 +18,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DomainConfig {
+
     @Bean
-    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository) {
-        return new GetTracksByUserUseCaseImpl(trackRepository);
+    public UserValidator userValidationHelper() {
+        return new UserValidator();
+    }
+
+    @Bean
+    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository,
+                                                         UserRepository userRepository,
+                                                         UserValidator userValidator) {
+        return new GetTracksByUserUseCaseImpl(trackRepository, userRepository, userValidator);
     }
 
     @Bean
@@ -34,4 +45,12 @@ public class DomainConfig {
     public EditUserNameUseCase editUserNameUseCase(UserRepository userRepository) {
         return new EditUserNameUseCaseImpl(userRepository);
     }
+
+    @Bean
+    public AddTrackUseCase addTrackUseCase(TrackRepository trackRepository,
+                                           UserRepository userRepository,
+                                           UserValidator userValidator) {
+        return new AddTrackUseCaseImpl(trackRepository, userRepository, userValidator);
+    }
+
 }

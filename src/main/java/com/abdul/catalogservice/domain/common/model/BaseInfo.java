@@ -1,4 +1,4 @@
-package com.abdul.catalogservice.domain.user.common.model;
+package com.abdul.catalogservice.domain.common.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

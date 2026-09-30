@@ -1,6 +1,6 @@
 package com.abdul.catalogservice.domain.user.model;
 
-import com.abdul.catalogservice.domain.user.common.model.BaseInfo;
+import com.abdul.catalogservice.domain.common.model.BaseInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

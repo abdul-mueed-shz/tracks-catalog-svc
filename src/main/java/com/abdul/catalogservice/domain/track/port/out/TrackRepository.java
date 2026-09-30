@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TrackRepository {
     List<TrackInfo> getAllByUserId(Long userId);
+    TrackInfo save(TrackInfo trackInfo);
 }

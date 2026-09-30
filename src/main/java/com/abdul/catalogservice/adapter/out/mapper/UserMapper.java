@@ -1,5 +1,6 @@
 package com.abdul.catalogservice.adapter.out.mapper;
 
+import com.abdul.catalogservice.adapter.utils.mapper.IgnoreIdAndAuditInfoMappings;
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import org.mapstruct.AfterMapping;
@@ -16,10 +17,7 @@ public interface UserMapper {
     @Mapping(source = "aliases", target = "aliases")
     UserInfo toDto(User entity);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "aliases", ignore = true)
+    @IgnoreIdAndAuditInfoMappings
     void updateEntity(UserInfo source, @MappingTarget User target);
 
     @Mapping(target = "id", ignore = true)
