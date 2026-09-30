@@ -11,4 +11,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class TrackFilterInfo {
     private Long userId;
+    private String userName;
 }
