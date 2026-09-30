@@ -3,6 +3,8 @@ package com.abdul.catalogservice.adapter.in.web.controller;
 import com.abdul.catalogservice.adapter.in.web.dto.AddTrackDto;
 import com.abdul.catalogservice.adapter.in.web.mapper.TrackDtoToDomainMapper;
 import com.abdul.catalogservice.domain.common.model.PageInfo;
+import com.abdul.catalogservice.domain.common.model.PaginationInfo;
+import com.abdul.catalogservice.domain.common.model.SortInfo;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
 import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
@@ -29,14 +31,13 @@ public class TrackController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<PageInfo<TrackInfo>> getTracksByUser(
             @PathVariable Long userId,
-            @RequestParam(required = false) String cursor,
-            @RequestParam(defaultValue = "20") int size
+            @ModelAttribute PaginationInfo paginationInfo,
+            @ModelAttribute SortInfo trackSortInfo
     ) {
-        // Handle size < 0 case
         return ResponseEntity.ok(getTracksByUserUseCase.execute(
                 userId,
-                cursor,
-                size
+                paginationInfo,
+                trackSortInfo
         ));
     }
 

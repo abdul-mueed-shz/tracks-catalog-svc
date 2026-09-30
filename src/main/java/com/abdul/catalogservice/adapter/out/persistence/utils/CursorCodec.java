@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @Component
 public class CursorCodec {
@@ -15,11 +17,19 @@ public class CursorCodec {
             return ScrollPosition.keyset();
         }
         try {
-            long id = Long.parseLong(new String(
+            String decoded = new String(
                     Base64.getUrlDecoder().decode(cursor),
                     StandardCharsets.UTF_8
-            ));
-            return ScrollPosition.forward(Map.of("id", id));
+            );
+            Map<String, Object> keys = new LinkedHashMap<>();
+            for (String value : decoded.split("&")) {
+                String[] entry = value.split("=", 2);
+                if (entry.length != 2) {
+                    throw new IllegalArgumentException("Invalid cursor");
+                }
+                keys.put(entry[0], decodeValue(entry[0], entry[1]));
+            }
+            return ScrollPosition.forward(keys);
         } catch (IllegalArgumentException exception) {
             throw new IllegalArgumentException("Invalid cursor", exception);
         }
@@ -27,9 +37,22 @@ public class CursorCodec {
 
     public String encodeCursor(ScrollPosition position) {
         KeysetScrollPosition keysetPosition = (KeysetScrollPosition) position;
-        Object id = keysetPosition.getKeys().get("id");
+        String value = keysetPosition.getKeys().entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .reduce((left, right) -> left + "&" + right)
+                .orElseThrow(() -> new IllegalArgumentException("Cannot encode empty cursor"));
         return Base64.getUrlEncoder().withoutPadding().encodeToString(
-                String.valueOf(id).getBytes(StandardCharsets.UTF_8)
+                value.getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    private Object decodeValue(String key, String value) {
+        if ("id".equals(key)) {
+            return Long.parseLong(value);
+        }
+        if ("createdAt".equals(key) || "updatedAt".equals(key)) {
+            return LocalDateTime.parse(value);
+        }
+        throw new IllegalArgumentException("Unsupported cursor key: " + key);
     }
 }
