@@ -18,38 +18,38 @@ public class TrackSpecification {
             Sort sort
     ) {
         return (root, query, criteriaBuilder) -> {
-                var predicate = criteriaBuilder.conjunction();
-                if (filterInfo.getUserId() != null) {
-                    predicate = criteriaBuilder.and(
-                            predicate,
-                            criteriaBuilder.equal(root.get("user").get("id"), filterInfo.getUserId())
-                    );
-                }
-                if (filterInfo.getUserName() != null && !filterInfo.getUserName().isBlank()) {
-                    String searchPattern = "%" + filterInfo.getUserName().trim().toLowerCase() + "%";
-                    var user = root.get("user");
-                    var nameMatch = criteriaBuilder.like(
-                            criteriaBuilder.lower(user.get("name")),
-                            searchPattern
-                    );
-                    var aliasQuery = query.subquery(Long.class);
-                    var alias = aliasQuery.from(UserAlias.class);
-                    aliasQuery.select(criteriaBuilder.literal(1L));
-                    aliasQuery.where(
-                            criteriaBuilder.equal(alias.get("user"), user),
-                            criteriaBuilder.like(
-                                    criteriaBuilder.lower(alias.get("normalizedName")),
-                                    searchPattern
-                            )
-                    );
-                    predicate = criteriaBuilder.and(
-                            predicate,
-                            criteriaBuilder.or(nameMatch, criteriaBuilder.exists(aliasQuery))
-                    );
-                }
-                if (position.isInitial()) {
-                    return predicate;
-                }
+            var predicate = criteriaBuilder.conjunction();
+            if (filterInfo.getUserId() != null) {
+                predicate = criteriaBuilder.and(
+                        predicate,
+                        criteriaBuilder.equal(root.get("user").get("id"), filterInfo.getUserId())
+                );
+            }
+            if (filterInfo.getUserName() != null && !filterInfo.getUserName().isBlank()) {
+                String searchPattern = "%" + filterInfo.getUserName().trim().toLowerCase() + "%";
+                var user = root.get("user");
+                var nameMatch = criteriaBuilder.like(
+                        criteriaBuilder.lower(user.get("name")),
+                        searchPattern
+                );
+                var aliasQuery = query.subquery(Long.class);
+                var alias = aliasQuery.from(UserAlias.class);
+                aliasQuery.select(criteriaBuilder.literal(1L));
+                aliasQuery.where(
+                        criteriaBuilder.equal(alias.get("user"), user),
+                        criteriaBuilder.like(
+                                criteriaBuilder.lower(alias.get("normalizedName")),
+                                searchPattern
+                        )
+                );
+                predicate = criteriaBuilder.and(
+                        predicate,
+                        criteriaBuilder.or(nameMatch, criteriaBuilder.exists(aliasQuery))
+                );
+            }
+            if (position.isInitial()) {
+                return predicate;
+            }
 
             String property = sort.iterator().next().getProperty();
             LocalDateTime value = (LocalDateTime) position.getKeys().get(property);

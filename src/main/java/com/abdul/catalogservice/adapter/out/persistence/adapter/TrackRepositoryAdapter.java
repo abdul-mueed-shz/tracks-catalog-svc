@@ -16,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 public class TrackRepositoryAdapter implements TrackRepository {
@@ -25,11 +23,6 @@ public class TrackRepositoryAdapter implements TrackRepository {
     private final TrackMapper trackMapper;
     private final TrackSpecification trackSpecification;
     private final CursorPaginationSupport cursorPaginationSupport;
-
-    @Override
-    public List<TrackInfo> getAllByUserId(Long userId) {
-        return trackMapper.toDtoList(trackJpaRepository.findAllByUserId(userId));
-    }
 
     @Override
     public PageInfo<TrackInfo> getAll(TrackFilterInfo filterInfo, PaginationInfo paginationInfo, SortInfo trackSortInfo) {

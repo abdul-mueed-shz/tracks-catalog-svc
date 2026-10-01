@@ -1,3 +1,4 @@
 TODO:
 
-DO NOT RETURN ANY ENTITY ID from the responses. Ignore them
+- DO NOT RETURN ANY ENTITY ID from the responses. Ignore them
+- The expensive join for track search against a user name and alias name is expensive. We can use Full text search engine i.e. Open Search to index the user name and alias name and search against it. This will improve the performance of the search.

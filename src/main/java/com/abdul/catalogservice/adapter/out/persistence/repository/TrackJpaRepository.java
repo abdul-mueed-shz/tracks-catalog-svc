@@ -9,8 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 
 public interface TrackJpaRepository extends JpaRepository<Track, Long>, JpaSpecificationExecutor<Track> {
-    List<Track> findAllByUserId(Long userId);
-
     default List<Track> findAll(Specification<Track> specification, Sort sort, int limit) {
         return findBy(specification, query -> query.sortBy(sort).limit(limit).all());
     }

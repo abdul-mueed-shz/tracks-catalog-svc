@@ -25,10 +25,8 @@ public class DomainConfig {
     }
 
     @Bean
-    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository,
-                                                         UserRepository userRepository,
-                                                         UserValidator userValidator) {
-        return new GetTracksByUserUseCaseImpl(trackRepository, userRepository, userValidator);
+    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository) {
+        return new GetTracksByUserUseCaseImpl(trackRepository);
     }
 
     @Bean
