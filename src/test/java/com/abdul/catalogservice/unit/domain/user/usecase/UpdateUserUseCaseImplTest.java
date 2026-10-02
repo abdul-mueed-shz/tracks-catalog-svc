@@ -18,9 +18,11 @@ import static org.mockito.Mockito.*;
 
 class UpdateUserUseCaseImplTest {
     private final UserRepository userRepository = mock(UserRepository.class);
+    private final com.abdul.catalogservice.domain.user.port.out.UserAliasRepository userAliasRepository =
+            mock(com.abdul.catalogservice.domain.user.port.out.UserAliasRepository.class);
     private final UserInfoMapper userInfoMapper = mock(UserInfoMapper.class);
     private final UpdateUserUseCaseImpl useCase =
-            new UpdateUserUseCaseImpl(userRepository, new UserValidator(), userInfoMapper);
+            new UpdateUserUseCaseImpl(userRepository, userAliasRepository, new UserValidator(), userInfoMapper);
 
     @Test
     void updatesArtistAndAddsNormalizedExistingNameAlias() {
@@ -30,28 +32,22 @@ class UpdateUserUseCaseImplTest {
         UserInfo saved = mapped;
         when(userRepository.getUserById(1L)).thenReturn(existing);
         when(userInfoMapper.update(update, existing)).thenReturn(mapped);
+        when(userAliasRepository.existsByUserIdAndNormalizedName(1L, "beyonce")).thenReturn(false);
         when(userRepository.updateUser(any(UserInfo.class))).thenReturn(saved);
 
         assertThat(useCase.execute(1L, update)).isSameAs(saved);
 
-        verify(userRepository).updateUser(argThat(user -> {
-            UserAliasInfo alias = user.getAliases().get(0);
-            return alias.getAliasName().equals(" Beyoncé ")
-                    && alias.getNormalizedName().equals("beyonce")
-                    && alias.getUser() == mapped;
-        }));
+        verify(userAliasRepository).create(argThat(alias ->
+                alias.getAliasName().equals("Beyoncé")
+                        && alias.getNormalizedName().equals("beyonce")
+                        && alias.getUserId().equals(1L)));
     }
 
     @Test
     void updatesNonArtistWithoutAddingAlias() {
-        UserAliasInfo existingAlias = UserAliasInfo.builder()
-                .aliasName("existing")
-                .normalizedName("existing")
-                .build();
         UserInfo existing = UserInfo.builder()
                 .id(1L)
                 .name("User")
-                .aliases(List.of(existingAlias))
                 .build();
         UserInfo update = UserInfo.builder().isArtist(false).build();
         UserInfo mapped = UserInfo.builder().id(1L).name("User").isArtist(false).build();
@@ -60,7 +56,7 @@ class UpdateUserUseCaseImplTest {
 
         useCase.execute(1L, update);
 
-        verify(userRepository).updateUser(argThat(user -> user.getAliases().isEmpty()));
+        verify(userAliasRepository, never()).create(any());
     }
 
     @Test

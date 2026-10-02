@@ -6,12 +6,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", uses = UserAliasDomainEntityMapper.class)
+@Mapper(componentModel = "spring")
 public interface UserDomainEntityMapper {
     @Named("userToEntity")
     User toEntity(UserInfo dto);
 
-    @Mapping(source = "aliases", target = "aliases")
     UserInfo toDto(User entity);
 
     @Named("userToUpdatedEntity")

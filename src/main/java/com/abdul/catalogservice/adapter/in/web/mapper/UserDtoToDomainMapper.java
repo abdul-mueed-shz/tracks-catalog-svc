@@ -12,11 +12,9 @@ import org.mapstruct.Named;
 public interface UserDtoToDomainMapper {
     @IgnoreIdAndAuditInfoMappings
     @Mapping(target = "name", source = "name", qualifiedByName = "trimName")
-    @Mapping(target = "aliases", ignore = true)
     UserInfo registerUserRequestToUserInfo(RegisterUserRequest registerUserRequest);
 
     @IgnoreIdAndAuditInfoMappings
-    @Mapping(target = "aliases", ignore = true)
     @Mapping(target = "isArtist", ignore = true)
     @Mapping(target = "name", source = "name", qualifiedByName = "trimName")
     UserInfo updateUserRequestToUserInfo(UpdateUserRequest updateUserRequest);

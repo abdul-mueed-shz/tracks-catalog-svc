@@ -17,4 +17,8 @@ public class TrackInfo extends BaseInfo {
     private String genre;
     private Integer durationMs;
     private LocalDate releaseDate;
+
+    public TrackInfo assignTo(UserInfo artist) {
+        return toBuilder().user(artist).build();
+    }
 }

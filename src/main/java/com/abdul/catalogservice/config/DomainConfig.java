@@ -12,6 +12,7 @@ import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
 import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
+import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUsersUseCaseImpl;
@@ -43,15 +44,17 @@ public class DomainConfig {
     }
 
     @Bean
-    public CreateUserUseCase getCreateUserUseCase(UserRepository userRepository) {
-        return new CreateUserUseCaseImpl(userRepository);
+    public CreateUserUseCase getCreateUserUseCase(UserRepository userRepository,
+                                                  UserAliasRepository userAliasRepository) {
+        return new CreateUserUseCaseImpl(userRepository, userAliasRepository);
     }
 
     @Bean
     public UpdateUserUseCase editUserNameUseCase(UserRepository userRepository,
+                                                 UserAliasRepository userAliasRepository,
                                                  UserValidator userValidator,
                                                  UserInfoMapper userInfoMapper) {
-        return new UpdateUserUseCaseImpl(userRepository, userValidator, userInfoMapper);
+        return new UpdateUserUseCaseImpl(userRepository, userAliasRepository, userValidator, userInfoMapper);
     }
 
     @Bean

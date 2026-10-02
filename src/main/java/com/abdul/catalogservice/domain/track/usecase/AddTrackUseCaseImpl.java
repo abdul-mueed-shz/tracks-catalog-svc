@@ -17,10 +17,9 @@ public class AddTrackUseCaseImpl implements AddTrackUseCase {
     @Override
     public TrackInfo execute(Long userId, TrackInfo trackInfo) {
         UserInfo userInfo = userRepository.getUserById(userId);
+        userValidator.userExists(userInfo);
         userValidator.isArtist(userInfo);
-        TrackInfo trackWithUser = trackInfo.toBuilder()
-                .user(userInfo)
-                .build();
+        TrackInfo trackWithUser = trackInfo.assignTo(userInfo);
         return trackRepository.save(trackWithUser);
     }
 }

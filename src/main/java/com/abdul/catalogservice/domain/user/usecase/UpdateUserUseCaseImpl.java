@@ -6,15 +6,14 @@ import com.abdul.catalogservice.domain.user.model.UserAliasInfo;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
+import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.text.Normalizer;
-import java.util.Locale;
 
 @RequiredArgsConstructor
 public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     private final UserRepository userRepository;
+    private final UserAliasRepository userAliasRepository;
     private final UserValidator userValidator;
     private final UserInfoMapper userInfoMapper;
 
@@ -25,20 +24,12 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
         userValidator.userExists(existingUserInfo);
         UserInfo userInfo = userInfoMapper.update(updatedUserInfo, existingUserInfo);
         if (Boolean.TRUE.equals(userInfo.getIsArtist())) {
-            UserAliasInfo userAlias = UserAliasInfo.builder()
-                    .aliasName(existingUserInfo.getName())
-                    .normalizedName(normalize(existingUserInfo.getName()))
-                    .user(userInfo)
-                    .build();
-            userInfo.getAliases().add(userAlias);
+            UserAliasInfo alias = UserAliasInfo.create(userInfo.getId(), existingUserInfo.getName());
+            if (!userAliasRepository.existsByUserIdAndNormalizedName(
+                    alias.getUserId(), alias.getNormalizedName())) {
+                userAliasRepository.create(alias);
+            }
         }
         return userRepository.updateUser(userInfo);
-    }
-
-    private String normalize(String value) {
-        return Normalizer
-                .normalize(value.trim()
-                        .toLowerCase(Locale.ROOT), Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "");
     }
 }
