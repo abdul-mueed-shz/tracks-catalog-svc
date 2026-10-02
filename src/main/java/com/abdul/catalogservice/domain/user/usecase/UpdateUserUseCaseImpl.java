@@ -24,12 +24,11 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
         UserInfo existingUserInfo = userRepository.getUserById(userId);
         userValidator.userExists(existingUserInfo);
         UserInfo userInfo = userInfoMapper.update(updatedUserInfo, existingUserInfo);
-        UserAliasInfo userAlias = null;
         if (Boolean.TRUE.equals(userInfo.getIsArtist())) {
-            userAlias = UserAliasInfo.builder()
+            UserAliasInfo userAlias = UserAliasInfo.builder()
                     .aliasName(existingUserInfo.getName())
                     .normalizedName(normalize(existingUserInfo.getName()))
-                    .isPrimary(true)
+                    .isPrimary(Boolean.FALSE)
                     .user(userInfo)
                     .build();
             userInfo.getAliases().add(userAlias);
