@@ -1,5 +1,8 @@
 package com.abdul.catalogservice.config;
 
+import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
+import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayRepository;
+import com.abdul.catalogservice.domain.artistofday.usecase.GetArtistOfTheDayUseCaseImpl;
 import com.abdul.catalogservice.domain.common.validation.UserValidator;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
 import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
@@ -11,8 +14,8 @@ import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
 import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
-import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
+import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUsersUseCaseImpl;
@@ -22,6 +25,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DomainConfig {
+
+    @Bean
+    public GetArtistOfTheDayUseCase getArtistOfTheDayUseCase(
+            UserRepository userRepository,
+            ArtistOfTheDayRepository artistOfTheDayRepository
+    ) {
+        return new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, userRepository);
+    }
 
     @Bean
     public UserValidator userValidationHelper() {

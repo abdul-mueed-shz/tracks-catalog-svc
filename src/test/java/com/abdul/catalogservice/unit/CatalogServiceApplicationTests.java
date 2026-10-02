@@ -3,6 +3,8 @@ package com.abdul.catalogservice.unit;
 import com.abdul.catalogservice.adapter.out.persistence.repository.TrackJpaRepository;
 import com.abdul.catalogservice.adapter.out.persistence.repository.UserJpaRepository;
 import com.abdul.catalogservice.adapter.out.persistence.repository.UserAliasJpaRepository;
+import com.abdul.catalogservice.adapter.out.persistence.repository.ArtistOfTheDayJpaRepository;
+import com.abdul.catalogservice.adapter.out.persistence.repository.ArtistRotationJpaRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -17,6 +19,12 @@ class CatalogServiceApplicationTests {
 
     @MockitoBean
     private UserAliasJpaRepository userAliasJpaRepository;
+
+    @MockitoBean
+    private ArtistOfTheDayJpaRepository artistOfTheDayJpaRepository;
+
+    @MockitoBean
+    private ArtistRotationJpaRepository artistRotationJpaRepository;
 
     @MockitoBean
     private TrackJpaRepository trackJpaRepository;
