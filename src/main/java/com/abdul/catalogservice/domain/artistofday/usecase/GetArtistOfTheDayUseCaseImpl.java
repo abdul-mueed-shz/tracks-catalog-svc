@@ -10,16 +10,17 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import java.time.Clock;
 
 @RequiredArgsConstructor
 public class GetArtistOfTheDayUseCaseImpl implements GetArtistOfTheDayUseCase {
     private final ArtistOfTheDayRepository artistOfTheDayRepository;
     private final UserRepository userRepository;
+    private final Clock clock;
 
     @Override
     public UserInfo execute() {
-        LocalDate currentDay = LocalDate.now(ZoneOffset.UTC);
+        LocalDate currentDay = LocalDate.now(clock);
         ArtistOfTheDayInfo existingAssignment = findAssignment(currentDay);
         if (existingAssignment != null) {
             return existingAssignment.getArtist();

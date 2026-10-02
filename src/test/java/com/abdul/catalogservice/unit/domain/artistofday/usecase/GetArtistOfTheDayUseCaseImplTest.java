@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.time.Clock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -18,7 +19,7 @@ class GetArtistOfTheDayUseCaseImplTest {
     private final ArtistOfTheDayRepository repository = mock(ArtistOfTheDayRepository.class);
     private final UserRepository userRepository = mock(UserRepository.class);
     private final GetArtistOfTheDayUseCaseImpl useCase =
-            new GetArtistOfTheDayUseCaseImpl(repository, userRepository);
+            new GetArtistOfTheDayUseCaseImpl(repository, userRepository, Clock.systemUTC());
 
     @Test
     void assignsAndReturnsNextArtist() {

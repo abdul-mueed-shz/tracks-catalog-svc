@@ -19,15 +19,24 @@ import com.abdul.catalogservice.domain.user.usecase.UpdateUserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Clock;
+import java.time.ZoneOffset;
+
 @Configuration
 public class DomainConfig {
 
     @Bean
     public GetArtistOfTheDayUseCaseImpl artistOfTheDayUseCase(
             UserRepository userRepository,
-            ArtistOfTheDayRepository artistOfTheDayRepository
+            ArtistOfTheDayRepository artistOfTheDayRepository,
+            Clock artistOfTheDayClock
     ) {
-        return new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, userRepository);
+        return new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, userRepository, artistOfTheDayClock);
+    }
+
+    @Bean
+    public Clock artistOfTheDayClock() {
+        return Clock.system(ZoneOffset.UTC);
     }
 
     @Bean
