@@ -64,7 +64,6 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public UserInfo updateUser(UserInfo userInfo) {
         User user = userDomainEntityMapper.toUpdatedEntity(userInfo);
-        // return userDomainEntityMapper.toDto(userJpaRepository.save(user));
-        return null;
+        return userDomainEntityMapper.toDto(userJpaRepository.save(user));
     }
 }
