@@ -10,9 +10,9 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.EditUserNameUseCaseImpl;
-import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
+import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
 import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
-import com.abdul.catalogservice.domain.track.usecase.GetTracksByUserUseCaseImpl;
+import com.abdul.catalogservice.domain.track.usecase.GetTracksUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,8 +25,8 @@ public class DomainConfig {
     }
 
     @Bean
-    public GetTracksByUserUseCase getTracksByUserUseCase(TrackRepository trackRepository) {
-        return new GetTracksByUserUseCaseImpl(trackRepository);
+    public GetTracksUseCase getTracksByUserUseCase(TrackRepository trackRepository) {
+        return new GetTracksUseCaseImpl(trackRepository);
     }
 
     @Bean

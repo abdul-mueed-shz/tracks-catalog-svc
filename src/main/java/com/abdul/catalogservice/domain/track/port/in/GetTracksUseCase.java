@@ -6,6 +6,6 @@ import com.abdul.catalogservice.domain.common.model.SortInfo;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import com.abdul.catalogservice.domain.track.model.TrackFilterInfo;
 
-public interface GetTracksByUserUseCase {
+public interface GetTracksUseCase {
     PageInfo<TrackInfo> execute(TrackFilterInfo filterInfo, PaginationInfo paginationInfo, SortInfo sortInfo);
 }

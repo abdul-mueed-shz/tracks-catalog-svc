@@ -8,7 +8,7 @@ import com.abdul.catalogservice.domain.common.model.SortInfo;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import com.abdul.catalogservice.domain.track.model.TrackFilterInfo;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
-import com.abdul.catalogservice.domain.track.port.in.GetTracksByUserUseCase;
+import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TrackController {
     private final TrackDtoToDomainMapper trackDtoToDomainMapper;
-    private final GetTracksByUserUseCase getTracksByUserUseCase;
+    private final GetTracksUseCase getTracksUseCase;
     private final AddTrackUseCase addTrackUseCase;
 
     @PostMapping("/user/{userId}/add")
@@ -30,12 +30,12 @@ public class TrackController {
     }
 
     @GetMapping
-    public ResponseEntity<PageInfo<TrackInfo>> getTracksByUser(
+    public ResponseEntity<PageInfo<TrackInfo>> getTracks(
             @ModelAttribute TrackFilterInfo filterInfo,
             @ModelAttribute PaginationInfo paginationInfo,
             @ModelAttribute SortInfo trackSortInfo
     ) {
-        return ResponseEntity.ok(getTracksByUserUseCase.execute(
+        return ResponseEntity.ok(getTracksUseCase.execute(
                 filterInfo,
                 paginationInfo,
                 trackSortInfo
