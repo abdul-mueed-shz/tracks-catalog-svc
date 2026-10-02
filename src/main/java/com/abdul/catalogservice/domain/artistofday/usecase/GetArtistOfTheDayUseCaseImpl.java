@@ -21,18 +21,18 @@ public class GetArtistOfTheDayUseCaseImpl implements GetArtistOfTheDayUseCase {
     public UserInfo execute() {
         LocalDate currentDay = LocalDate.now(ZoneOffset.UTC);
         ArtistOfTheDayInfo existingAssignment = findAssignment(currentDay);
-//        if (existingAssignment != null) {
-//            return existingAssignment.getArtist();
-//        }
+        if (existingAssignment != null) {
+            return existingAssignment.getArtist();
+        }
 
         ArtistRotationInfo artistRotationInfo = artistOfTheDayRepository.getArtistRotationInfo();
         if (artistRotationInfo == null) {
             artistRotationInfo = artistOfTheDayRepository.initializeRotation();
         }
-//        existingAssignment = findAssignment(currentDay);
-//        if (existingAssignment != null) {
-//            return existingAssignment.getArtist();
-//        }
+        existingAssignment = findAssignment(currentDay);
+        if (existingAssignment != null) {
+            return existingAssignment.getArtist();
+        }
 
         Long artistId = artistRotationInfo.getLastArtistId();
         UserInfo artistOfTheDay = findArtist(artistId);
