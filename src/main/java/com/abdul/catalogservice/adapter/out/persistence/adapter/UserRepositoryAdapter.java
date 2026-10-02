@@ -1,9 +1,9 @@
 package com.abdul.catalogservice.adapter.out.persistence.adapter;
 
-import com.abdul.catalogservice.adapter.out.mapper.UserMapper;
-import com.abdul.catalogservice.adapter.out.mapper.UserAliasMapper;
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
 import com.abdul.catalogservice.adapter.out.persistence.entity.UserAlias;
+import com.abdul.catalogservice.adapter.out.persistence.mapper.UserAliasMapper;
+import com.abdul.catalogservice.adapter.out.persistence.mapper.UserMapper;
 import com.abdul.catalogservice.adapter.out.persistence.repository.UserJpaRepository;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;

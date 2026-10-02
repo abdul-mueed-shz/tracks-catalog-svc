@@ -1,6 +1,6 @@
-package com.abdul.catalogservice.adapter.out.persistence.pagination;
+package com.abdul.catalogservice.adapter.out.persistence.utils.pagination;
 
-import com.abdul.catalogservice.adapter.out.persistence.utils.CursorCodec;
+import com.abdul.catalogservice.adapter.out.persistence.utils.codec.CursorCodec;
 import com.abdul.catalogservice.domain.common.enums.SortDirection;
 import com.abdul.catalogservice.domain.common.enums.SortProperty;
 import com.abdul.catalogservice.domain.common.model.PageInfo;

@@ -1,7 +1,7 @@
-package com.abdul.catalogservice.adapter.out.mapper;
+package com.abdul.catalogservice.adapter.out.persistence.mapper;
 
-import com.abdul.catalogservice.adapter.utils.mapper.IgnoreIdAndAuditInfoMappings;
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
+import com.abdul.catalogservice.adapter.utils.mapper.IgnoreIdAndAuditInfoMappings;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;

@@ -1,7 +1,6 @@
-package com.abdul.catalogservice.adapter.out.mapper;
+package com.abdul.catalogservice.adapter.out.persistence.mapper;
 
 import com.abdul.catalogservice.adapter.out.persistence.entity.Track;
-import com.abdul.catalogservice.domain.common.model.PageInfo;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import org.mapstruct.Mapper;
 

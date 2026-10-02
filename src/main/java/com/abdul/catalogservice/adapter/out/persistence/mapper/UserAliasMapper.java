@@ -1,13 +1,9 @@
-package com.abdul.catalogservice.adapter.out.mapper;
+package com.abdul.catalogservice.adapter.out.persistence.mapper;
 
-import com.abdul.catalogservice.adapter.out.persistence.entity.UserAlias;
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
+import com.abdul.catalogservice.adapter.out.persistence.entity.UserAlias;
 import com.abdul.catalogservice.domain.user.model.UserAliasInfo;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserAliasMapper {

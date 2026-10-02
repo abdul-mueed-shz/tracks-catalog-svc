@@ -2,16 +2,20 @@ package com.abdul.catalogservice.adapter.out.persistence.specification;
 
 import com.abdul.catalogservice.adapter.out.persistence.entity.Track;
 import com.abdul.catalogservice.adapter.out.persistence.entity.UserAlias;
+import com.abdul.catalogservice.adapter.out.persistence.utils.specification.CursorPredicateSupport;
 import com.abdul.catalogservice.domain.track.model.TrackFilterInfo;
+import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
+@RequiredArgsConstructor
 public class TrackSpecification {
+    private final CursorPredicateSupport cursorPredicateSupport;
+
     public Specification<Track> filterBy(
             TrackFilterInfo filterInfo,
             KeysetScrollPosition position,
@@ -47,29 +51,11 @@ public class TrackSpecification {
                         criteriaBuilder.or(nameMatch, criteriaBuilder.exists(aliasQuery))
                 );
             }
-            if (position.isInitial()) {
-                return predicate;
-            }
-
-            String property = sort.iterator().next().getProperty();
-            LocalDateTime value = (LocalDateTime) position.getKeys().get(property);
-            Long id = (Long) position.getKeys().get("id");
-            var propertyPath = root.<LocalDateTime>get(property);
-            var idPath = root.<Long>get("id");
-            boolean ascending = sort.iterator().next().isAscending();
-            var afterProperty = ascending
-                    ? criteriaBuilder.greaterThan(propertyPath, value)
-                    : criteriaBuilder.lessThan(propertyPath, value);
-            var afterId = ascending
-                    ? criteriaBuilder.greaterThan(idPath, id)
-                    : criteriaBuilder.lessThan(idPath, id);
-
+            Predicate cursorPredicate =
+                    cursorPredicateSupport.addCursorPredicate(root, criteriaBuilder, predicate, position, sort);
             return criteriaBuilder.and(
                     predicate,
-                    criteriaBuilder.or(
-                            afterProperty,
-                            criteriaBuilder.and(criteriaBuilder.equal(propertyPath, value), afterId)
-                    )
+                    cursorPredicate
             );
         };
     }

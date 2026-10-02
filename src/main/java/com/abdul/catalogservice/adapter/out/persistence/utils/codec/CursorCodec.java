@@ -1,14 +1,14 @@
-package com.abdul.catalogservice.adapter.out.persistence.utils;
+package com.abdul.catalogservice.adapter.out.persistence.utils.codec;
 
 import org.springframework.data.domain.KeysetScrollPosition;
 import org.springframework.data.domain.ScrollPosition;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.time.LocalDateTime;
 
 @Component
 public class CursorCodec {
