@@ -15,7 +15,7 @@ on:
     branches: [ "master" ]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -35,6 +35,9 @@ jobs:
 
     - name: Run unit tests
       run: mvn -B test --file pom.xml
+
+    - name: Run integration tests
+      run: mvn -B verify -DskipUnitTests=true --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph

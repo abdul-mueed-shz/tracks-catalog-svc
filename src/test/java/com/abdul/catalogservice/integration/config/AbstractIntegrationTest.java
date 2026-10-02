@@ -4,7 +4,6 @@ import com.abdul.catalogservice.adapter.out.persistence.adapter.UserRepositoryAd
 import com.abdul.catalogservice.adapter.out.persistence.repository.ArtistOfTheDayJpaRepository;
 import com.abdul.catalogservice.adapter.out.persistence.repository.ArtistRotationJpaRepository;
 import com.abdul.catalogservice.adapter.out.persistence.repository.UserJpaRepository;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -12,23 +11,21 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integration")
-@EnableAutoConfiguration
 @EnableJpaRepositories(basePackageClasses = {
         UserJpaRepository.class,
         ArtistOfTheDayJpaRepository.class,
         ArtistRotationJpaRepository.class
 })
-@Import(UserRepositoryAdapter.class)
+@Import({UserRepositoryAdapter.class, IntegrationClockConfiguration.class})
 public abstract class AbstractIntegrationTest {
-    @Container
-    static final PostgreSQLContainer<?> POSTGRES =
-            new PostgreSQLContainer<>("postgres:16-alpine");
+    static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    static {
+        POSTGRES.start();
+    }
 
     @DynamicPropertySource
     static void configureDatabase(DynamicPropertyRegistry registry) {
