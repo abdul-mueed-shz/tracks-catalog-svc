@@ -2,6 +2,14 @@ package com.abdul.catalogservice.adapter.out.persistence.repository;
 
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
-public interface UserJpaRepository extends JpaRepository<User, Long> {
+import java.util.List;
+
+public interface UserJpaRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+    default List<User> findAll(Specification<User> specification, Sort sort, int limit) {
+        return findBy(specification, query -> query.sortBy(sort).limit(limit).all());
+    }
 }

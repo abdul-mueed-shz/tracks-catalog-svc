@@ -5,9 +5,17 @@ import com.abdul.catalogservice.adapter.out.persistence.entity.UserAlias;
 import com.abdul.catalogservice.adapter.out.persistence.mapper.UserAliasMapper;
 import com.abdul.catalogservice.adapter.out.persistence.mapper.UserMapper;
 import com.abdul.catalogservice.adapter.out.persistence.repository.UserJpaRepository;
+import com.abdul.catalogservice.adapter.out.persistence.specification.UserSpecification;
+import com.abdul.catalogservice.adapter.out.persistence.utils.pagination.CursorPaginationSupport;
+import com.abdul.catalogservice.domain.common.enums.SortProperty;
+import com.abdul.catalogservice.domain.common.model.PageInfo;
+import com.abdul.catalogservice.domain.common.model.PaginationInfo;
+import com.abdul.catalogservice.domain.common.model.SortInfo;
+import com.abdul.catalogservice.domain.user.model.UserFilterInfo;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
@@ -20,6 +28,31 @@ public class UserRepositoryAdapter implements UserRepository {
     private final UserJpaRepository userJpaRepository;
     private final UserMapper userMapper;
     private final UserAliasMapper userAliasMapper;
+    private final UserSpecification userSpecification;
+    private final CursorPaginationSupport cursorPaginationSupport;
+
+    @Override
+    public PageInfo<UserInfo> getAll(
+            UserFilterInfo filterInfo,
+            PaginationInfo paginationInfo,
+            SortInfo sortInfo
+    ) {
+        return cursorPaginationSupport.execute(
+                paginationInfo,
+                sortInfo,
+                (position, query) -> {
+                    Specification<User> specification = userSpecification.filterBy(
+                            filterInfo, position, query.sort()
+                    );
+                    return userJpaRepository.findAll(specification, query.sort(), query.limit().max());
+                },
+                userMapper::toDto,
+                user -> SortProperty.CREATED_AT.getProperty().equals(sortInfo.getProperty())
+                        ? user.getCreatedAt()
+                        : user.getUpdatedAt(),
+                User::getId
+        );
+    }
 
     @Override
     public UserInfo getUserById(Long id) {

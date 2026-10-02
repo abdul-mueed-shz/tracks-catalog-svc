@@ -1,7 +1,9 @@
 package com.abdul.catalogservice.adapter.in.web.handler;
 
 import com.abdul.catalogservice.domain.common.exception.DomainValidationException;
+import com.abdul.catalogservice.domain.common.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,7 +21,7 @@ public class GlobalExceptionHandler {
     ) {
         String message = exception.getBindingResult().getFieldErrors().stream()
                 .findFirst()
-                .map(error -> error.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse("Request validation failed.");
         return error(HttpStatus.BAD_REQUEST, message, request);
     }
@@ -30,6 +32,14 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         return error(HttpStatus.BAD_REQUEST, exception.getMessage(), request);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(
+            NotFoundException exception,
+            HttpServletRequest request
+    ) {
+        return error(HttpStatus.NOT_FOUND, exception.getMessage(), request);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

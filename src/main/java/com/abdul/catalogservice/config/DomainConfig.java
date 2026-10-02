@@ -5,10 +5,12 @@ import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
 import com.abdul.catalogservice.domain.track.usecase.AddTrackUseCaseImpl;
 import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
+import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
 import com.abdul.catalogservice.domain.user.port.in.EditUserNameUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
+import com.abdul.catalogservice.domain.user.usecase.GetUsersUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.EditUserNameUseCaseImpl;
 import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
 import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
@@ -32,6 +34,11 @@ public class DomainConfig {
     @Bean
     public GetUserDetailsUseCase getUserDetailsUseCase(UserRepository userRepository) {
         return new GetUserDetailsUseCaseImpl(userRepository);
+    }
+
+    @Bean
+    public GetUsersUseCase getUsersUseCase(UserRepository userRepository) {
+        return new GetUsersUseCaseImpl(userRepository);
     }
 
     @Bean
