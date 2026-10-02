@@ -25,7 +25,7 @@ public class UserSpecification {
             if (filterInfo.getIsArtist() != null) {
                 predicate = criteriaBuilder.and(
                         predicate,
-                        criteriaBuilder.equal(root.get("artist"), filterInfo.getIsArtist())
+                        criteriaBuilder.equal(root.get("isArtist"), filterInfo.getIsArtist())
                 );
             }
             Predicate cursorPredicate =

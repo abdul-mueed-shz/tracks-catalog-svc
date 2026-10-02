@@ -6,7 +6,7 @@ import com.abdul.catalogservice.domain.user.model.UserAliasInfo;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
-public interface UserAliasMapper {
+public interface UserAliasDomainEntityMapper {
     @Mapping(target = "user", ignore = true)
     UserAlias toEntity(UserAliasInfo dto);
 

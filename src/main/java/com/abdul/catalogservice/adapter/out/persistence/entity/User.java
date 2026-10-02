@@ -1,6 +1,9 @@
 package com.abdul.catalogservice.adapter.out.persistence.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +23,9 @@ import java.util.List;
 public class User extends BaseEntity {
     private String name;
 
-    @Column(name = "is_artist", nullable = false)
     @ColumnDefault("false")
     @Builder.Default
-    private boolean artist = false;
+    private Boolean isArtist = false;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

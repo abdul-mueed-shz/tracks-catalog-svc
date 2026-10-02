@@ -1,19 +1,19 @@
 package com.abdul.catalogservice.domain.user.usecase;
 
+import com.abdul.catalogservice.domain.common.validation.UserValidator;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class GetUserDetailsUseCaseImplTest {
 
     private final UserRepository userRepository = mock(UserRepository.class);
+    private final UserValidator userValidator = mock(UserValidator.class);
     private final GetUserDetailsUseCaseImpl useCase =
-            new GetUserDetailsUseCaseImpl(userRepository);
+            new GetUserDetailsUseCaseImpl(userRepository, userValidator);
 
     @Test
     void returnsUserDetailsForUserId() {

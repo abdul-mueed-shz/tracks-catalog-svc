@@ -1,7 +1,7 @@
 package com.abdul.catalogservice.adapter.in.web.controller;
 
 import com.abdul.catalogservice.adapter.in.web.dto.RegisterUserRequest;
-import com.abdul.catalogservice.adapter.in.web.dto.UpdateUserNameRequest;
+import com.abdul.catalogservice.adapter.in.web.dto.UpdateUserRequest;
 import com.abdul.catalogservice.adapter.in.web.mapper.UserDtoToDomainMapper;
 import com.abdul.catalogservice.domain.common.model.PageInfo;
 import com.abdul.catalogservice.domain.common.model.PaginationInfo;
@@ -11,7 +11,7 @@ import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
-import com.abdul.catalogservice.domain.user.port.in.EditUserNameUseCase;
+import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class UserController {
     private final GetUserDetailsUseCase userDetailsUseCase;
     private final GetUsersUseCase getUsersUseCase;
     private final CreateUserUseCase createUserUseCase;
-    private final EditUserNameUseCase editUserNameUseCase;
+    private final UpdateUserUseCase updateUserUseCase;
     private final UserDtoToDomainMapper userDtoToDomainMapper;
 
     @GetMapping
@@ -62,11 +62,12 @@ public class UserController {
         return ResponseEntity.ok(userInfo);
     }
 
-    @PatchMapping("/{userId}/name")
-    public ResponseEntity<UserInfo> editUserName(
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserInfo> updateUser(
             @PathVariable Long userId,
-            @Valid @RequestBody UpdateUserNameRequest request
+            @Valid @RequestBody UpdateUserRequest request
     ) {
-        return ResponseEntity.ok(editUserNameUseCase.execute(userId, request.name()));
+        ;
+        return ResponseEntity.ok(updateUserUseCase.execute(userId, userDtoToDomainMapper.updateUserRequestToUserInfo(request)));
     }
 }

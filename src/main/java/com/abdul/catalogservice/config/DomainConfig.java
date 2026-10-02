@@ -2,19 +2,20 @@ package com.abdul.catalogservice.config;
 
 import com.abdul.catalogservice.domain.common.validation.UserValidator;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
+import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
+import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
 import com.abdul.catalogservice.domain.track.usecase.AddTrackUseCaseImpl;
+import com.abdul.catalogservice.domain.track.usecase.GetTracksUseCaseImpl;
+import com.abdul.catalogservice.domain.user.mapper.UserInfoMapper;
 import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
-import com.abdul.catalogservice.domain.user.port.in.EditUserNameUseCase;
+import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUsersUseCaseImpl;
-import com.abdul.catalogservice.domain.user.usecase.EditUserNameUseCaseImpl;
-import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
-import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
-import com.abdul.catalogservice.domain.track.usecase.GetTracksUseCaseImpl;
+import com.abdul.catalogservice.domain.user.usecase.UpdateUserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,8 +33,8 @@ public class DomainConfig {
     }
 
     @Bean
-    public GetUserDetailsUseCase getUserDetailsUseCase(UserRepository userRepository) {
-        return new GetUserDetailsUseCaseImpl(userRepository);
+    public GetUserDetailsUseCase getUserDetailsUseCase(UserRepository userRepository, UserValidator userValidator) {
+        return new GetUserDetailsUseCaseImpl(userRepository, userValidator);
     }
 
     @Bean
@@ -47,8 +48,10 @@ public class DomainConfig {
     }
 
     @Bean
-    public EditUserNameUseCase editUserNameUseCase(UserRepository userRepository) {
-        return new EditUserNameUseCaseImpl(userRepository);
+    public UpdateUserUseCase editUserNameUseCase(UserRepository userRepository,
+                                                 UserValidator userValidator,
+                                                 UserInfoMapper userInfoMapper) {
+        return new UpdateUserUseCaseImpl(userRepository, userValidator, userInfoMapper);
     }
 
     @Bean
