@@ -12,5 +12,4 @@ public class UserAliasInfo extends BaseInfo {
     private UserInfo user;
     private String aliasName;
     private String normalizedName;
-    private Boolean isPrimary;
 }

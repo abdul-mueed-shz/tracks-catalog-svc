@@ -27,9 +27,6 @@ public class UserAlias extends BaseEntity {
     @Column(name = "normalized_name", nullable = false)
     private String normalizedName;
 
-    @Column(name = "is_primary")
-    private Boolean isPrimary;
-
     public void assignUser(User user) {
         this.user = user;
     }

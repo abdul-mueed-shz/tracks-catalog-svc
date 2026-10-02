@@ -28,7 +28,6 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
             UserAliasInfo userAlias = UserAliasInfo.builder()
                     .aliasName(existingUserInfo.getName())
                     .normalizedName(normalize(existingUserInfo.getName()))
-                    .isPrimary(Boolean.FALSE)
                     .user(userInfo)
                     .build();
             userInfo.getAliases().add(userAlias);
