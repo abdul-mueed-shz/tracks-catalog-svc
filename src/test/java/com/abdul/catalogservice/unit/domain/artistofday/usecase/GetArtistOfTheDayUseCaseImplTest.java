@@ -24,6 +24,7 @@ class GetArtistOfTheDayUseCaseImplTest {
     void assignsAndReturnsNextArtist() {
         ArtistRotationInfo rotation = ArtistRotationInfo.builder().id(1L).build();
         UserInfo artist = UserInfo.builder().id(1L).isArtist(true).build();
+        when(repository.getArtistOfTheDay(any(LocalDate.class))).thenReturn(null);
         ArtistOfTheDayInfo assignment = ArtistOfTheDayInfo.builder()
                 .day(LocalDate.now(ZoneOffset.UTC))
                 .artist(artist)
@@ -37,5 +38,19 @@ class GetArtistOfTheDayUseCaseImplTest {
         verify(repository).saveArtistOfTheDay(argThat(saved ->
                 saved.getDay().equals(LocalDate.now(ZoneOffset.UTC))
                         && saved.getArtist().equals(artist)));
+    }
+
+    @Test
+    void returnsExistingArtistWithoutAdvancingRotation() {
+        UserInfo artist = UserInfo.builder().id(2L).isArtist(true).build();
+        when(repository.getArtistOfTheDay(any(LocalDate.class)))
+                .thenReturn(ArtistOfTheDayInfo.builder().artist(artist).build());
+
+        assertThat(useCase.execute()).isSameAs(artist);
+
+        verify(repository, never()).getArtistRotationInfo();
+        verify(repository, never()).updateArtistRotation(any());
+        verify(repository, never()).saveArtistOfTheDay(any());
+        verifyNoInteractions(userRepository);
     }
 }

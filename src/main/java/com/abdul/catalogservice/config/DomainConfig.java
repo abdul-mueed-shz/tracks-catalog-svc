@@ -1,19 +1,15 @@
 package com.abdul.catalogservice.config;
 
-import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
-import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayRepository;
 import com.abdul.catalogservice.domain.artistofday.usecase.GetArtistOfTheDayUseCaseImpl;
+import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayRepository;
 import com.abdul.catalogservice.domain.common.validation.UserValidator;
 import com.abdul.catalogservice.domain.track.port.in.AddTrackUseCase;
 import com.abdul.catalogservice.domain.track.port.in.GetTracksUseCase;
 import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
 import com.abdul.catalogservice.domain.track.usecase.AddTrackUseCaseImpl;
 import com.abdul.catalogservice.domain.track.usecase.GetTracksUseCaseImpl;
-import com.abdul.catalogservice.domain.user.mapper.UserInfoMapper;
-import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
-import com.abdul.catalogservice.domain.user.port.in.UpdateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
@@ -27,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class DomainConfig {
 
     @Bean
-    public GetArtistOfTheDayUseCase getArtistOfTheDayUseCase(
+    public GetArtistOfTheDayUseCaseImpl artistOfTheDayUseCase(
             UserRepository userRepository,
             ArtistOfTheDayRepository artistOfTheDayRepository
     ) {
@@ -55,17 +51,18 @@ public class DomainConfig {
     }
 
     @Bean
-    public CreateUserUseCase getCreateUserUseCase(UserRepository userRepository,
-                                                  UserAliasRepository userAliasRepository) {
+    public CreateUserUseCaseImpl createUserUseCase(
+            UserRepository userRepository,
+            UserAliasRepository userAliasRepository
+    ) {
         return new CreateUserUseCaseImpl(userRepository, userAliasRepository);
     }
 
     @Bean
-    public UpdateUserUseCase editUserNameUseCase(UserRepository userRepository,
-                                                 UserAliasRepository userAliasRepository,
-                                                 UserValidator userValidator,
-                                                 UserInfoMapper userInfoMapper) {
-        return new UpdateUserUseCaseImpl(userRepository, userAliasRepository, userValidator, userInfoMapper);
+    public UpdateUserUseCaseImpl editUserNameUseCase(UserRepository userRepository,
+                                                     UserAliasRepository userAliasRepository,
+                                                     UserValidator userValidator) {
+        return new UpdateUserUseCaseImpl(userRepository, userAliasRepository, userValidator);
     }
 
     @Bean

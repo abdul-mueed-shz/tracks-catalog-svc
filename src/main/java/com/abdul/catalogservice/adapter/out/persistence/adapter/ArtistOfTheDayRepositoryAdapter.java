@@ -10,6 +10,7 @@ import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
@@ -21,6 +22,12 @@ public class ArtistOfTheDayRepositoryAdapter implements ArtistOfTheDayRepository
     private final ArtistRotationJpaRepository artistRotationJpaRepository;
     private final ArtistOfTheDayDomainEntityMapper artistOfTheDayDomainEntityMapper;
 
+    @Override
+    public ArtistOfTheDayInfo getArtistOfTheDay(LocalDate day) {
+        return artistOfTheDayJpaRepository.findById(day)
+                .map(artistOfTheDayDomainEntityMapper::toArtistOfTheDayDomain)
+                .orElse(null);
+    }
 
     @Override
     public ArtistRotationInfo initializeRotation() {

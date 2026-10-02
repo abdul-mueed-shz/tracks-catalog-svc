@@ -28,19 +28,6 @@ public class UserController {
     private final UpdateUserUseCase updateUserUseCase;
     private final UserDtoToDomainMapper userDtoToDomainMapper;
 
-    @GetMapping
-    public ResponseEntity<PageInfo<UserInfo>> getUsers(
-            @ModelAttribute UserFilterInfo filterInfo,
-            @ModelAttribute PaginationInfo paginationInfo,
-            @ModelAttribute SortInfo userSortInfo
-    ) {
-        return ResponseEntity.ok(getUsersUseCase.execute(
-                filterInfo,
-                paginationInfo,
-                userSortInfo
-        ));
-    }
-
     @PostMapping
     public ResponseEntity<UserInfo> registerUser(
             @Valid @RequestBody RegisterUserRequest request
@@ -54,20 +41,32 @@ public class UserController {
         ).body(createdUser);
     }
 
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserInfo> updateUser(
+            @PathVariable Long userId,
+            @Valid @RequestBody UpdateUserRequest request
+    ) {
+        return ResponseEntity.ok(updateUserUseCase.execute(userId, userDtoToDomainMapper.updateUserRequestToUserInfo(request)));
+    }
+
+    @GetMapping
+    public ResponseEntity<PageInfo<UserInfo>> getUsers(
+            @ModelAttribute UserFilterInfo filterInfo,
+            @ModelAttribute PaginationInfo paginationInfo,
+            @ModelAttribute SortInfo userSortInfo
+    ) {
+        return ResponseEntity.ok(getUsersUseCase.execute(
+                filterInfo,
+                paginationInfo,
+                userSortInfo
+        ));
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserInfo> getUserDetails(
             @PathVariable Long userId
     ) {
         UserInfo userInfo = userDetailsUseCase.execute(userId);
         return ResponseEntity.ok(userInfo);
-    }
-
-    @PatchMapping("/{userId}")
-    public ResponseEntity<UserInfo> updateUser(
-            @PathVariable Long userId,
-            @Valid @RequestBody UpdateUserRequest request
-    ) {
-        ;
-        return ResponseEntity.ok(updateUserUseCase.execute(userId, userDtoToDomainMapper.updateUserRequestToUserInfo(request)));
     }
 }

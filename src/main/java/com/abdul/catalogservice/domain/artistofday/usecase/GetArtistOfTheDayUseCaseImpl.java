@@ -8,8 +8,6 @@ import com.abdul.catalogservice.domain.common.exception.NotFoundException;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -20,16 +18,24 @@ public class GetArtistOfTheDayUseCaseImpl implements GetArtistOfTheDayUseCase {
     private final UserRepository userRepository;
 
     @Override
-    @Transactional
-    @Cacheable(cacheNames = "artistOfTheDay")
     public UserInfo execute() {
+        LocalDate currentDay = LocalDate.now(ZoneOffset.UTC);
+        ArtistOfTheDayInfo existingAssignment = findAssignment(currentDay);
+//        if (existingAssignment != null) {
+//            return existingAssignment.getArtist();
+//        }
+
         ArtistRotationInfo artistRotationInfo = artistOfTheDayRepository.getArtistRotationInfo();
         if (artistRotationInfo == null) {
             artistRotationInfo = artistOfTheDayRepository.initializeRotation();
         }
+//        existingAssignment = findAssignment(currentDay);
+//        if (existingAssignment != null) {
+//            return existingAssignment.getArtist();
+//        }
+
         Long artistId = artistRotationInfo.getLastArtistId();
         UserInfo artistOfTheDay = findArtist(artistId);
-        LocalDate currentDay = LocalDate.now(ZoneOffset.UTC);
         ArtistOfTheDayInfo artistOfTheDayInfo = ArtistOfTheDayInfo.builder()
                 .day(currentDay)
                 .artist(artistOfTheDay)
@@ -38,6 +44,10 @@ public class GetArtistOfTheDayUseCaseImpl implements GetArtistOfTheDayUseCase {
         artistOfTheDayRepository.updateArtistRotation(artistRotationInfo);
         ArtistOfTheDayInfo saveArtistOfTheDay = artistOfTheDayRepository.saveArtistOfTheDay(artistOfTheDayInfo);
         return saveArtistOfTheDay.getArtist();
+    }
+
+    private ArtistOfTheDayInfo findAssignment(LocalDate day) {
+        return artistOfTheDayRepository.getArtistOfTheDay(day);
     }
 
     private UserInfo findArtist(Long lastArtistId) {

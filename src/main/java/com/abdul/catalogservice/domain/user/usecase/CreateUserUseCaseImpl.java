@@ -6,7 +6,6 @@ import com.abdul.catalogservice.domain.user.port.in.CreateUserUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 public class CreateUserUseCaseImpl implements CreateUserUseCase {
@@ -14,7 +13,6 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
     private final UserAliasRepository userAliasRepository;
 
     @Override
-    @Transactional
     public UserInfo execute(UserInfo userInfo) {
         UserInfo created = userRepository.createUser(userInfo);
         if (Boolean.TRUE.equals(created.getIsArtist())) {

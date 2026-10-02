@@ -1,9 +1,9 @@
 package com.abdul.catalogservice.adapter.in.schedular.artistoftheday;
 
 import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
-import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

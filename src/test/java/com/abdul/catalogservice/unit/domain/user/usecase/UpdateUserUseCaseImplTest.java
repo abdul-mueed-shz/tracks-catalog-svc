@@ -2,7 +2,6 @@ package com.abdul.catalogservice.unit.domain.user.usecase;
 
 import com.abdul.catalogservice.domain.common.exception.NotFoundException;
 import com.abdul.catalogservice.domain.common.validation.UserValidator;
-import com.abdul.catalogservice.domain.user.mapper.UserInfoMapper;
 import com.abdul.catalogservice.domain.user.model.UserAliasInfo;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
@@ -20,18 +19,16 @@ class UpdateUserUseCaseImplTest {
     private final UserRepository userRepository = mock(UserRepository.class);
     private final com.abdul.catalogservice.domain.user.port.out.UserAliasRepository userAliasRepository =
             mock(com.abdul.catalogservice.domain.user.port.out.UserAliasRepository.class);
-    private final UserInfoMapper userInfoMapper = mock(UserInfoMapper.class);
     private final UpdateUserUseCaseImpl useCase =
-            new UpdateUserUseCaseImpl(userRepository, userAliasRepository, new UserValidator(), userInfoMapper);
+            new UpdateUserUseCaseImpl(userRepository, userAliasRepository, new UserValidator());
 
     @Test
     void updatesArtistAndAddsNormalizedExistingNameAlias() {
-        UserInfo existing = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(false).build();
-        UserInfo update = UserInfo.builder().isArtist(true).build();
-        UserInfo mapped = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(true).build();
+        UserInfo existing = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(true).build();
+        UserInfo update = UserInfo.builder().name("New Name").build();
+        UserInfo mapped = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(false).build();
         UserInfo saved = mapped;
         when(userRepository.getUserById(1L)).thenReturn(existing);
-        when(userInfoMapper.update(update, existing)).thenReturn(mapped);
         when(userAliasRepository.existsByUserIdAndNormalizedName(1L, "beyonce")).thenReturn(false);
         when(userRepository.updateUser(any(UserInfo.class))).thenReturn(saved);
 
@@ -52,7 +49,6 @@ class UpdateUserUseCaseImplTest {
         UserInfo update = UserInfo.builder().isArtist(false).build();
         UserInfo mapped = UserInfo.builder().id(1L).name("User").isArtist(false).build();
         when(userRepository.getUserById(1L)).thenReturn(existing);
-        when(userInfoMapper.update(update, existing)).thenReturn(mapped);
 
         useCase.execute(1L, update);
 
@@ -66,7 +62,6 @@ class UpdateUserUseCaseImplTest {
         assertThatThrownBy(() -> useCase.execute(1L, UserInfo.builder().build()))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("User not found.");
-        verifyNoInteractions(userInfoMapper);
         verify(userRepository, never()).updateUser(any());
     }
 }
