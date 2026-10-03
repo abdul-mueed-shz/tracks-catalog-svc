@@ -5,6 +5,7 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/Redis-7-red.svg)](https://redis.io/)
 [![Docker](https://img.shields.io/badge/Docker-Multi--stage-2496ED.svg)](https://www.docker.com/)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-green.svg)](http://localhost:8080/catalog-svc/swagger-ui.html)
 
 A scalable, high-performance music catalog microservice built with **Java 21**, **Spring Boot 4**, **PostgreSQL**, and
 **Redis**. Designed following **Hexagonal Architecture (Ports and Adapters)** and **Domain-Driven Design (DDD)**
@@ -20,7 +21,11 @@ principles.
     - [Domain-Driven Design (DDD)](#domain-driven-design-ddd)
     - [Key Architectural Decisions](#key-architectural-decisions)
 - [Architecture Diagrams](#architecture-diagrams)
-- [API Reference](#api-reference)
+- [API Reference & Documentation](#api-reference)
+    - [OpenAPI & Swagger UI](#openapi--swagger-ui)
+    - [Interactive Demo UI](#interactive-demo-ui)
+    - [Endpoints](#endpoints)
+    - [Example Response Payloads](#example-response-payloads)
 - [Project Structure](#project-structure)
 - [Documentation Index (`docs/`)](#documentation-index-docs)
 - [Configuration & Environment Variables](#configuration--environment-variables)
@@ -194,6 +199,25 @@ sequenceDiagram
 
 ## API Reference
 
+### OpenAPI & Swagger UI
+
+The service includes built-in OpenAPI 3 support powered by `springdoc-openapi` with automatic endpoint discovery:
+
+- **Swagger UI**: [`http://localhost:8080/catalog-svc/swagger-ui.html`](http://localhost:8080/catalog-svc/swagger-ui.html) (or [`/catalog-svc/swagger-ui/index.html`](http://localhost:8080/catalog-svc/swagger-ui/index.html))
+- **OpenAPI JSON Specification**: [`http://localhost:8080/catalog-svc/v3/api-docs`](http://localhost:8080/catalog-svc/v3/api-docs)
+
+Use the Swagger UI to interactively inspect endpoints, view request/response DTO schemas, and execute live API calls directly from your browser.
+
+### Interactive Demo UI
+
+If you want to test and explore the API through a graphical user interface instead of Swagger or curl:
+
+- **Demo UI Repository**: [tracks-catalog-svc-demo-ui](https://github.com/abdul-mueed-shz/tracks-catalog-svc-demo-ui)
+- *Note*: This demo UI was "vibe coded" as a quick companion testing tool and is not part of this backend task.
+- `catalog-service` has CORS pre-configured ([`WebCorsConfig`](file:///home/abdul-mueed-shahbaz/Projects/ice%20music%20svc/catalog-service/src/main/java/com/abdul/catalogservice/config/WebCorsConfig.java)) to allow seamless interaction from the frontend UI.
+
+### Endpoints
+
 All requests and responses use JSON and are prefixed with `/catalog-svc`.
 
 | Method  | Endpoint                    | Description                                             | Request Body / Query Params                                                                                 | Response                                           |
@@ -266,7 +290,7 @@ catalog-service/
     │   │   │   └── utils/                  # MapStruct annotation utilities
     │   │   ├── application/                # Application Services (@Transactional, @Cacheable)
     │   │   ├── domain/                     # Pure DDD models, use cases, ports, and validators
-    │   │   └── config/                     # DomainConfig, PersistenceAuditingConfig, RedisCacheConfig
+    │   │   └── config/                     # DomainConfig, OpenApiConfig, PersistenceAuditingConfig, RedisCacheConfig, WebCorsConfig
     │   └── resources/
     │       ├── application.yml             # Base configuration (datasource, redis, cache, lettuce)
     │       └── application-dev.yml         # Dev profile overrides
@@ -358,6 +382,11 @@ Or with the `dev` profile:
 ```
 
 The application will start at `http://localhost:8080/catalog-svc`.
+
+Once running, you can access:
+- **Swagger UI**: [`http://localhost:8080/catalog-svc/swagger-ui.html`](http://localhost:8080/catalog-svc/swagger-ui.html)
+- **OpenAPI JSON Docs**: [`http://localhost:8080/catalog-svc/v3/api-docs`](http://localhost:8080/catalog-svc/v3/api-docs)
+- **Demo UI**: [tracks-catalog-svc-demo-ui](https://github.com/abdul-mueed-shz/tracks-catalog-svc-demo-ui) (for testing through a web UI)
 
 ### Running Full Stack with Docker Compose
 
