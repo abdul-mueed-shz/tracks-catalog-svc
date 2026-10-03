@@ -1,5 +1,6 @@
 package com.abdul.catalogservice.config;
 
+import com.abdul.catalogservice.domain.artistofday.port.out.ArtistCatalog;
 import com.abdul.catalogservice.domain.artistofday.usecase.GetArtistOfTheDayUseCaseImpl;
 import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayRepository;
 import com.abdul.catalogservice.domain.common.validation.UserValidator;
@@ -29,11 +30,11 @@ public class DomainConfig {
 
     @Bean
     public GetArtistOfTheDayUseCaseImpl artistOfTheDayUseCase(
-            UserRepository userRepository,
+            ArtistCatalog artistCatalog,
             ArtistOfTheDayRepository artistOfTheDayRepository,
             Clock artistOfTheDayClock
     ) {
-        return new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, userRepository, artistOfTheDayClock);
+        return new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, artistCatalog, artistOfTheDayClock);
     }
 
     @Bean

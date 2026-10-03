@@ -1,7 +1,7 @@
 package com.abdul.catalogservice.adapter.in.web.controller;
 
+import com.abdul.catalogservice.domain.artist.model.ArtistInfo;
 import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
-import com.abdul.catalogservice.domain.user.model.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ public class ArtistOfTheDayController {
     private final GetArtistOfTheDayUseCase getArtistOfTheDayUseCase;
 
     @GetMapping
-    public ResponseEntity<UserInfo> getArtistOfTheDay() {
+    public ResponseEntity<ArtistInfo> getArtistOfTheDay() {
         return ResponseEntity.ok(getArtistOfTheDayUseCase.execute());
     }
 }

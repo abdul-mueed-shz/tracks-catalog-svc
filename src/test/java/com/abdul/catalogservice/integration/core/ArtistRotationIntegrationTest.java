@@ -2,9 +2,9 @@ package com.abdul.catalogservice.integration.core;
 
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
 import com.abdul.catalogservice.adapter.out.persistence.repository.*;
+import com.abdul.catalogservice.domain.artistofday.port.out.ArtistCatalog;
 import com.abdul.catalogservice.domain.artistofday.port.out.ArtistOfTheDayRepository;
 import com.abdul.catalogservice.domain.artistofday.usecase.GetArtistOfTheDayUseCaseImpl;
-import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.integration.config.AbstractIntegrationTest;
 import com.abdul.catalogservice.integration.config.MutableClock;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ class ArtistRotationIntegrationTest extends AbstractIntegrationTest {
     private UserJpaRepository userJpaRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ArtistCatalog artistCatalog;
 
     @Autowired
     private ArtistOfTheDayRepository artistOfTheDayRepository;
@@ -57,15 +57,15 @@ class ArtistRotationIntegrationTest extends AbstractIntegrationTest {
         User third = userJpaRepository.save(User.builder().name("Third").isArtist(true).build());
 
         GetArtistOfTheDayUseCaseImpl useCase =
-                new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, userRepository, clock);
+                new GetArtistOfTheDayUseCaseImpl(artistOfTheDayRepository, artistCatalog, clock);
 
-        assertThat(useCase.execute().getId()).isEqualTo(first.getId());
+        assertThat(useCase.execute().id()).isEqualTo(first.getId());
         clock.advanceTo("2026-10-02T00:00:00Z");
-        assertThat(useCase.execute().getId()).isEqualTo(second.getId());
+        assertThat(useCase.execute().id()).isEqualTo(second.getId());
         clock.advanceTo("2026-10-03T00:00:00Z");
-        assertThat(useCase.execute().getId()).isEqualTo(third.getId());
+        assertThat(useCase.execute().id()).isEqualTo(third.getId());
         clock.advanceTo("2026-10-04T00:00:00Z");
-        assertThat(useCase.execute().getId()).isEqualTo(first.getId());
+        assertThat(useCase.execute().id()).isEqualTo(first.getId());
     }
 
 }

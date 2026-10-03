@@ -1,8 +1,8 @@
 package com.abdul.catalogservice.application.artistofday;
 
+import com.abdul.catalogservice.domain.artist.model.ArtistInfo;
 import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
 import com.abdul.catalogservice.domain.artistofday.usecase.GetArtistOfTheDayUseCaseImpl;
-import com.abdul.catalogservice.domain.user.model.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
@@ -19,7 +19,7 @@ public class ArtistOfTheDayService implements GetArtistOfTheDayUseCase {
     @Transactional
     @Cacheable(cacheNames = "artistOfTheDay",
             key = "T(java.time.LocalDate).now(T(java.time.ZoneOffset).UTC)")
-    public UserInfo execute() {
+    public ArtistInfo execute() {
         return getArtistOfTheDayUseCase.execute();
     }
 }

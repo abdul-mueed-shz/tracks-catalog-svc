@@ -66,16 +66,4 @@ public class UserRepositoryAdapter implements UserRepository {
         User user = userDomainEntityMapper.toUpdatedEntity(userInfo);
         return userDomainEntityMapper.toDto(userJpaRepository.save(user));
     }
-
-    @Override
-    public UserInfo findFirstArtistUser() {
-        Optional<User> userOptional = userJpaRepository.findFirstByIsArtistTrueOrderByIdAsc();
-        return userOptional.map(userDomainEntityMapper::toDto).orElse(null);
-    }
-
-    @Override
-    public UserInfo findArtistUserAfterArtistId(Long lastArtistId) {
-        Optional<User> userOptional = userJpaRepository.findFirstByIsArtistTrueAndIdGreaterThanOrderByIdAsc(lastArtistId);
-        return userOptional.map(userDomainEntityMapper::toDto).orElse(null);
-    }
 }

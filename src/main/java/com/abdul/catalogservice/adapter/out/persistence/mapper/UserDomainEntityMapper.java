@@ -1,6 +1,7 @@
 package com.abdul.catalogservice.adapter.out.persistence.mapper;
 
 import com.abdul.catalogservice.adapter.out.persistence.entity.User;
+import com.abdul.catalogservice.domain.artist.model.ArtistInfo;
 import com.abdul.catalogservice.domain.user.model.UserInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -18,4 +19,5 @@ public interface UserDomainEntityMapper {
     @Mapping(target = "updatedAt", ignore = true)
     User toUpdatedEntity(UserInfo source);
 
+    ArtistInfo toArtistInfo(User entity);
 }

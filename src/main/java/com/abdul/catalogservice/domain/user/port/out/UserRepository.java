@@ -14,8 +14,4 @@ public interface UserRepository {
     UserInfo createUser(UserInfo userInfo);
 
     UserInfo updateUser(UserInfo userInfo);
-
-    UserInfo findFirstArtistUser();
-
-    UserInfo findArtistUserAfterArtistId(Long lastArtistId);
 }
