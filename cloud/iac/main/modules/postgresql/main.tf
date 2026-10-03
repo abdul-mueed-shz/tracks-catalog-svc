@@ -35,6 +35,13 @@ resource "azurerm_postgresql_flexible_server" "this" {
   public_network_access_enabled = true
   auto_grow_enabled             = false
   tags                          = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      zone,
+      high_availability[0].standby_availability_zone
+    ]
+  }
 }
 
 resource "azurerm_postgresql_flexible_server_database" "this" {

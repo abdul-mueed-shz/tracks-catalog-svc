@@ -120,7 +120,40 @@ resource "azurerm_container_app" "this" {
 
       env {
         name  = "SPRING_CACHE_TYPE"
-        value = "redis"
+        value = var.cache_type
+      }
+
+      env {
+        name  = "MANAGEMENT_HEALTH_REDIS_ENABLED"
+        value = "false"
+      }
+
+      env {
+        name  = "MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS"
+        value = "always"
+      }
+
+      env {
+        name  = "SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"
+        value = "org.hibernate.dialect.PostgreSQLDialect"
+      }
+
+      dynamic "env" {
+        for_each = var.cache_type != "redis" ? [1] : []
+        content {
+          name  = "SPRING_AUTOCONFIGURE_EXCLUDE"
+          value = "org.springframework.boot.data.redis.autoconfigure.DataRedisAutoConfiguration,org.springframework.boot.data.redis.autoconfigure.DataRedisReactiveAutoConfiguration,org.springframework.boot.data.redis.autoconfigure.DataRedisRepositoriesAutoConfiguration,org.springframework.boot.data.redis.autoconfigure.health.DataRedisHealthContributorAutoConfiguration,org.springframework.boot.data.redis.autoconfigure.health.DataRedisReactiveHealthContributorAutoConfiguration,org.springframework.boot.data.redis.autoconfigure.observation.LettuceObservationAutoConfiguration"
+        }
+      }
+
+      env {
+        name  = "SPRING_DATA_REDIS_LETTUCE_POOL_MIN_IDLE"
+        value = "0"
+      }
+
+      env {
+        name  = "SPRING_DATA_REDIS_LETTUCE_CLUSTER_REFRESH_ADAPTIVE"
+        value = "false"
       }
 
       dynamic "env" {
@@ -134,21 +167,22 @@ resource "azurerm_container_app" "this" {
       liveness_probe {
         transport               = "HTTP"
         port                    = var.target_port
-        path                    = "/catalog-svc/actuator/health"
+        path                    = "/catalog-svc/actuator/health/liveness"
         initial_delay           = 30
-        interval_seconds        = 20
+        interval_seconds        = 15
         timeout                 = 5
-        failure_count_threshold = 3
+        failure_count_threshold = 5
       }
 
       readiness_probe {
         transport               = "HTTP"
         port                    = var.target_port
-        path                    = "/catalog-svc/actuator/health"
+        path                    = "/catalog-svc/actuator/health/readiness"
         initial_delay           = 25
-        interval_seconds        = 15
+        interval_seconds        = 10
         timeout                 = 5
-        failure_count_threshold = 3
+        failure_count_threshold = 5
+        success_count_threshold = 1
       }
     }
 

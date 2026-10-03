@@ -34,8 +34,8 @@ output "postgres_jdbc_url" {
 }
 
 output "redis_hostname" {
-  description = "Redis hostname (sidecar container or managed Redis)"
-  value       = var.use_managed_redis ? module.redis[0].hostname : "localhost (container sidecar)"
+  description = "Redis hostname or active cache mode"
+  value       = var.use_managed_redis ? module.redis[0].hostname : "in-memory (Spring ConcurrentMapCache)"
 }
 
 output "acr_login_server" {

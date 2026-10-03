@@ -79,8 +79,9 @@ module "container_app" {
   datasource_username = module.postgresql.administrator_login
   datasource_password = module.postgresql.administrator_password
 
-  # Redis Connection (Defaults to zero-cost Redis 7 container inside Container App)
-  enable_redis_sidecar = !var.use_managed_redis
+  # Cache Configuration (Uses in-memory cache for express ACA; Redis if managed redis is enabled)
+  cache_type           = var.use_managed_redis ? "redis" : "simple"
+  enable_redis_sidecar = false
   redis_host           = var.use_managed_redis ? module.redis[0].hostname : "localhost"
   redis_port           = var.use_managed_redis ? module.redis[0].ssl_port : 6379
   redis_password       = var.use_managed_redis ? module.redis[0].primary_access_key : null

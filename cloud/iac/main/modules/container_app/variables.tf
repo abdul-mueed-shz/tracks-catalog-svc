@@ -95,9 +95,15 @@ variable "redis_ssl_enabled" {
 }
 
 variable "enable_redis_sidecar" {
-  description = "Whether to run a Redis 7 container inside the Container App pod (Zero cost, no retirement issues)"
+  description = "Whether to run a Redis 7 container inside the Container App pod"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "cache_type" {
+  description = "Spring Cache type (simple, redis, none)"
+  type        = string
+  default     = "simple"
 }
 
 variable "redis_sidecar_image" {
