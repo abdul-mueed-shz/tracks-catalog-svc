@@ -15,5 +15,21 @@ services:
       timeout: 5s
       retries: 10
 
+  catalog-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: catalog-service:local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/catalog
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+
 volumes:
   catalog-postgres-data:
