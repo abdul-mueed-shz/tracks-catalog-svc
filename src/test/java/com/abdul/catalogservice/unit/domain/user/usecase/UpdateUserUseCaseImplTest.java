@@ -8,7 +8,7 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.UpdateUserUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -24,15 +24,15 @@ class UpdateUserUseCaseImplTest {
 
     @Test
     void updatesArtistAndAddsNormalizedExistingNameAlias() {
-        UserInfo existing = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(true).build();
+        UUID userId = UUID.randomUUID();
+        UserInfo existing = UserInfo.builder().id(1L).uuid(userId).name(" Beyoncé ").isArtist(true).build();
         UserInfo update = UserInfo.builder().name("New Name").build();
-        UserInfo mapped = UserInfo.builder().id(1L).name(" Beyoncé ").isArtist(false).build();
-        UserInfo saved = mapped;
-        when(userRepository.getUserById(1L)).thenReturn(existing);
+        UserInfo saved = UserInfo.builder().id(1L).uuid(userId).name("New Name").isArtist(true).build();
+        when(userRepository.getUserByUuid(userId)).thenReturn(existing);
         when(userAliasRepository.existsByUserIdAndNormalizedName(1L, "beyonce")).thenReturn(false);
         when(userRepository.updateUser(any(UserInfo.class))).thenReturn(saved);
 
-        assertThat(useCase.execute(1L, update)).isSameAs(saved);
+        assertThat(useCase.execute(userId, update)).isSameAs(saved);
 
         verify(userAliasRepository).create(argThat(alias ->
                 alias.getAliasName().equals("Beyoncé")
@@ -42,24 +42,26 @@ class UpdateUserUseCaseImplTest {
 
     @Test
     void updatesNonArtistWithoutAddingAlias() {
+        UUID userId = UUID.randomUUID();
         UserInfo existing = UserInfo.builder()
                 .id(1L)
+                .uuid(userId)
                 .name("User")
                 .build();
         UserInfo update = UserInfo.builder().isArtist(false).build();
-        UserInfo mapped = UserInfo.builder().id(1L).name("User").isArtist(false).build();
-        when(userRepository.getUserById(1L)).thenReturn(existing);
+        when(userRepository.getUserByUuid(userId)).thenReturn(existing);
 
-        useCase.execute(1L, update);
+        useCase.execute(userId, update);
 
         verify(userAliasRepository, never()).create(any());
     }
 
     @Test
     void rejectsUpdateForMissingUser() {
-        when(userRepository.getUserById(1L)).thenReturn(null);
+        UUID userId = UUID.randomUUID();
+        when(userRepository.getUserByUuid(userId)).thenReturn(null);
 
-        assertThatThrownBy(() -> useCase.execute(1L, UserInfo.builder().build()))
+        assertThatThrownBy(() -> useCase.execute(userId, UserInfo.builder().build()))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("User not found.");
         verify(userRepository, never()).updateUser(any());

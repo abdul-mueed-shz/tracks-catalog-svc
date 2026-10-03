@@ -1,6 +1,7 @@
 package com.abdul.catalogservice.adapter.in.web.controller;
 
-import com.abdul.catalogservice.domain.artist.model.ArtistInfo;
+import com.abdul.catalogservice.adapter.in.web.dto.ArtistResponse;
+import com.abdul.catalogservice.adapter.in.web.mapper.UserDtoToDomainMapper;
 import com.abdul.catalogservice.domain.artistofday.port.in.GetArtistOfTheDayUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ArtistOfTheDayController {
     private final GetArtistOfTheDayUseCase getArtistOfTheDayUseCase;
+    private final UserDtoToDomainMapper userDtoToDomainMapper;
 
     @GetMapping
-    public ResponseEntity<ArtistInfo> getArtistOfTheDay() {
-        return ResponseEntity.ok(getArtistOfTheDayUseCase.execute());
+    public ResponseEntity<ArtistResponse> getArtistOfTheDay() {
+        return ResponseEntity.ok(userDtoToDomainMapper.toArtistResponse(getArtistOfTheDayUseCase.execute()));
     }
 }

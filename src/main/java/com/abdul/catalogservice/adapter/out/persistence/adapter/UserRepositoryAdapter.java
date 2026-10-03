@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,6 +54,13 @@ public class UserRepositoryAdapter implements UserRepository {
     public UserInfo getUserById(Long id) {
         Optional<User> userOptional = userJpaRepository.findById(id);
         return userOptional.map(userDomainEntityMapper::toDto).orElse(null);
+    }
+
+    @Override
+    public UserInfo getUserByUuid(UUID uuid) {
+        return userJpaRepository.findByUuid(uuid)
+                .map(userDomainEntityMapper::toDto)
+                .orElse(null);
     }
 
     @Override

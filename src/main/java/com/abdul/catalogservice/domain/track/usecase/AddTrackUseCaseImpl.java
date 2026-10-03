@@ -8,6 +8,8 @@ import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class AddTrackUseCaseImpl implements AddTrackUseCase {
     private final TrackRepository trackRepository;
@@ -15,8 +17,8 @@ public class AddTrackUseCaseImpl implements AddTrackUseCase {
     private final UserValidator userValidator;
 
     @Override
-    public TrackInfo execute(Long userId, TrackInfo trackInfo) {
-        UserInfo userInfo = userRepository.getUserById(userId);
+    public TrackInfo execute(UUID userId, TrackInfo trackInfo) {
+        UserInfo userInfo = userRepository.getUserByUuid(userId);
         userValidator.userExists(userInfo);
         userValidator.isArtist(userInfo);
         TrackInfo trackWithUser = trackInfo.assignTo(userInfo);

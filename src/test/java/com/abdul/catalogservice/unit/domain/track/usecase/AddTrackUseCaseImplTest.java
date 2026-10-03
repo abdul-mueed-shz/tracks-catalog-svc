@@ -10,6 +10,8 @@ import com.abdul.catalogservice.domain.user.model.UserInfo;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -23,13 +25,14 @@ class AddTrackUseCaseImplTest {
 
     @Test
     void addsTrackWithArtistAsOwner() {
-        UserInfo artist = UserInfo.builder().id(1L).isArtist(true).build();
+        UUID userUuid = UUID.randomUUID();
+        UserInfo artist = UserInfo.builder().id(1L).uuid(userUuid).isArtist(true).build();
         TrackInfo request = TrackInfo.builder().title("Track").build();
         TrackInfo saved = request.toBuilder().user(artist).build();
-        when(userRepository.getUserById(1L)).thenReturn(artist);
+        when(userRepository.getUserByUuid(userUuid)).thenReturn(artist);
         when(trackRepository.save(any(TrackInfo.class))).thenReturn(saved);
 
-        TrackInfo result = useCase.execute(1L, request);
+        TrackInfo result = useCase.execute(userUuid, request);
 
         assertThat(result).isSameAs(saved);
         verify(trackRepository).save(argThat(track -> track.getUser() == artist
@@ -38,10 +41,11 @@ class AddTrackUseCaseImplTest {
 
     @Test
     void rejectsTrackForMissingUser() {
-        when(userRepository.getUserById(1L)).thenReturn(null);
+        UUID userUuid = UUID.randomUUID();
+        when(userRepository.getUserByUuid(userUuid)).thenReturn(null);
         TrackInfo trackInfo = TrackInfo.builder().build();
 
-        assertThatThrownBy(() -> useCase.execute(1L, trackInfo))
+        assertThatThrownBy(() -> useCase.execute(userUuid, trackInfo))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("User not found.");
         verifyNoInteractions(trackRepository);
@@ -49,11 +53,12 @@ class AddTrackUseCaseImplTest {
 
     @Test
     void rejectsTrackForNonArtistUser() {
-        when(userRepository.getUserById(1L))
-                .thenReturn(UserInfo.builder().id(1L).isArtist(false).build());
+        UUID userUuid = UUID.randomUUID();
+        when(userRepository.getUserByUuid(userUuid))
+                .thenReturn(UserInfo.builder().id(1L).uuid(userUuid).isArtist(false).build());
         TrackInfo trackInfo = TrackInfo.builder().build();
 
-        assertThatThrownBy(() -> useCase.execute(1L, trackInfo))
+        assertThatThrownBy(() -> useCase.execute(userUuid, trackInfo))
                 .isInstanceOf(DomainValidationException.class)
                 .hasMessage("User is not an artist.");
         verifyNoInteractions(trackRepository);

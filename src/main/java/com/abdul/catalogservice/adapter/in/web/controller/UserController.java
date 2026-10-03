@@ -2,6 +2,7 @@ package com.abdul.catalogservice.adapter.in.web.controller;
 
 import com.abdul.catalogservice.adapter.in.web.dto.RegisterUserRequest;
 import com.abdul.catalogservice.adapter.in.web.dto.UpdateUserRequest;
+import com.abdul.catalogservice.adapter.in.web.dto.UserResponse;
 import com.abdul.catalogservice.adapter.in.web.mapper.UserDtoToDomainMapper;
 import com.abdul.catalogservice.domain.common.model.PageInfo;
 import com.abdul.catalogservice.domain.common.model.PaginationInfo;
@@ -18,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -29,44 +32,46 @@ public class UserController {
     private final UserDtoToDomainMapper userDtoToDomainMapper;
 
     @PostMapping
-    public ResponseEntity<UserInfo> registerUser(
+    public ResponseEntity<UserResponse> registerUser(
             @Valid @RequestBody RegisterUserRequest request
     ) {
         UserInfo createdUser = createUserUseCase.execute(userDtoToDomainMapper.registerUserRequestToUserInfo(request));
         return ResponseEntity.created(
                 ServletUriComponentsBuilder.fromCurrentRequest()
                         .path("/{userId}")
-                        .buildAndExpand(createdUser.getId())
+                        .buildAndExpand(createdUser.getUuid())
                         .toUri()
-        ).body(createdUser);
+        ).body(userDtoToDomainMapper.toUserResponse(createdUser));
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserInfo> updateUser(
-            @PathVariable Long userId,
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable UUID userId,
             @Valid @RequestBody UpdateUserRequest request
     ) {
-        return ResponseEntity.ok(updateUserUseCase.execute(userId, userDtoToDomainMapper.updateUserRequestToUserInfo(request)));
+        UserInfo updatedUser = updateUserUseCase.execute(userId, userDtoToDomainMapper.updateUserRequestToUserInfo(request));
+        return ResponseEntity.ok(userDtoToDomainMapper.toUserResponse(updatedUser));
     }
 
     @GetMapping
-    public ResponseEntity<PageInfo<UserInfo>> getUsers(
+    public ResponseEntity<PageInfo<UserResponse>> getUsers(
             @ModelAttribute UserFilterInfo filterInfo,
             @ModelAttribute PaginationInfo paginationInfo,
             @ModelAttribute SortInfo userSortInfo
     ) {
-        return ResponseEntity.ok(getUsersUseCase.execute(
+        PageInfo<UserInfo> usersPage = getUsersUseCase.execute(
                 filterInfo,
                 paginationInfo,
                 userSortInfo
-        ));
+        );
+        return ResponseEntity.ok(usersPage.map(userDtoToDomainMapper::toUserResponse));
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserInfo> getUserDetails(
-            @PathVariable Long userId
+    public ResponseEntity<UserResponse> getUserDetails(
+            @PathVariable UUID userId
     ) {
         UserInfo userInfo = userDetailsUseCase.execute(userId);
-        return ResponseEntity.ok(userInfo);
+        return ResponseEntity.ok(userDtoToDomainMapper.toUserResponse(userInfo));
     }
 }

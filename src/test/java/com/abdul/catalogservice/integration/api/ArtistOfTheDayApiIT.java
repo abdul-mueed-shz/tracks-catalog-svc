@@ -3,15 +3,17 @@ package com.abdul.catalogservice.integration.api;
 import com.abdul.catalogservice.integration.api.config.AbstractCatalogApiIT;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 class ArtistOfTheDayApiIT extends AbstractCatalogApiIT {
     @Test
     void rotatesArtistOfTheDayThroughTheApi() {
-        Long firstArtistId = registerUser("First Artist", true);
-        Long secondArtistId = registerUser("Second Artist", true);
-        Long thirdArtistId = registerUser("Third Artist", true);
+        UUID firstArtistId = registerUser("First Artist", true);
+        UUID secondArtistId = registerUser("Second Artist", true);
+        UUID thirdArtistId = registerUser("Third Artist", true);
 
         assertArtistOfTheDay(firstArtistId);
         clock.advanceTo("2026-10-02T00:00:00Z");
@@ -22,12 +24,13 @@ class ArtistOfTheDayApiIT extends AbstractCatalogApiIT {
         assertArtistOfTheDay(firstArtistId);
     }
 
-    private void assertArtistOfTheDay(Long expectedArtistId) {
+    private void assertArtistOfTheDay(UUID expectedArtistId) {
         given().spec(request())
                 .when()
                 .get("/artist-of-the-day")
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(expectedArtistId.intValue()));
+                .body("id", equalTo(expectedArtistId.toString()))
+                .body("uuid", equalTo(expectedArtistId.toString()));
     }
 }

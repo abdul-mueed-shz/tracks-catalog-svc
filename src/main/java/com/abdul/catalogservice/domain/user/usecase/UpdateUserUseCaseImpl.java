@@ -8,6 +8,8 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.UUID;
+
 @RequiredArgsConstructor
 public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     private final UserRepository userRepository;
@@ -15,8 +17,8 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     private final UserValidator userValidator;
 
     @Override
-    public UserInfo execute(Long userId, UserInfo updatedUserInfo) {
-        UserInfo existingUserInfo = userRepository.getUserById(userId);
+    public UserInfo execute(UUID userId, UserInfo updatedUserInfo) {
+        UserInfo existingUserInfo = userRepository.getUserByUuid(userId);
         userValidator.userExists(existingUserInfo);
         UserInfo userInfo = updatedUserInfo.getName() == null
                 ? existingUserInfo

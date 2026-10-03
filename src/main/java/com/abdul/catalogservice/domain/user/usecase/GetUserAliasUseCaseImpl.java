@@ -9,6 +9,7 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class GetUserAliasUseCaseImpl implements GetUserAliasUseCase {
@@ -17,12 +18,12 @@ public class GetUserAliasUseCaseImpl implements GetUserAliasUseCase {
     private final UserValidator userValidator;
 
     @Override
-    public List<UserAliasInfo> getAll(Long userId) {
-        UserInfo userInfo = userRepository.getUserById(userId);
+    public List<UserAliasInfo> getAll(UUID userId) {
+        UserInfo userInfo = userRepository.getUserByUuid(userId);
         userValidator.userExists(userInfo);
         if (!Boolean.TRUE.equals(userInfo.getIsArtist())) {
             return List.of();
         }
-        return userAliasRepository.getAllByUserId(userId);
+        return userAliasRepository.getAllByUserId(userInfo.getId());
     }
 }

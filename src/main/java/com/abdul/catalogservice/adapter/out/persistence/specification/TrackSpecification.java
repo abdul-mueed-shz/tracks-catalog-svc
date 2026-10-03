@@ -26,7 +26,7 @@ public class TrackSpecification {
             if (filterInfo.getUserId() != null) {
                 predicate = criteriaBuilder.and(
                         predicate,
-                        criteriaBuilder.equal(root.get("user").get("id"), filterInfo.getUserId())
+                        criteriaBuilder.equal(root.get("user").get("uuid"), filterInfo.getUserId())
                 );
             }
             if (filterInfo.getUserName() != null && !filterInfo.getUserName().isBlank()) {

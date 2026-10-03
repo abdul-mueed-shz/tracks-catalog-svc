@@ -3,13 +3,15 @@ package com.abdul.catalogservice.integration.api;
 import com.abdul.catalogservice.integration.api.config.AbstractCatalogApiIT;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 class UpdateUserApiIT extends AbstractCatalogApiIT {
     @Test
     void editsArtistNameAndReturnsUpdatedArtist() {
-        Long artistId = registerUser("Original Name", true);
+        UUID artistId = registerUser("Original Name", true);
 
         given().spec(request())
                 .contentType("application/json")
@@ -21,7 +23,8 @@ class UpdateUserApiIT extends AbstractCatalogApiIT {
                 .patch("/users/{userId}")
                 .then()
                 .statusCode(200)
-                .body("id", equalTo(artistId.intValue()))
+                .body("id", equalTo(artistId.toString()))
+                .body("uuid", equalTo(artistId.toString()))
                 .body("name", equalTo("Updated Name"))
                 .body("isArtist", equalTo(true));
 
@@ -40,6 +43,8 @@ class UpdateUserApiIT extends AbstractCatalogApiIT {
                 .get("/users/{userId}")
                 .then()
                 .statusCode(200)
+                .body("id", equalTo(artistId.toString()))
+                .body("uuid", equalTo(artistId.toString()))
                 .body("name", equalTo("Updated Name"));
     }
 }

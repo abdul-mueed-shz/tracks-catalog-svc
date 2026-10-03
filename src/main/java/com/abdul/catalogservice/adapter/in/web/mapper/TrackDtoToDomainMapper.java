@@ -1,6 +1,7 @@
 package com.abdul.catalogservice.adapter.in.web.mapper;
 
 import com.abdul.catalogservice.adapter.in.web.dto.AddTrackDto;
+import com.abdul.catalogservice.adapter.in.web.dto.TrackResponse;
 import com.abdul.catalogservice.adapter.utils.IgnoreIdAndAuditInfoMappings;
 import com.abdul.catalogservice.domain.track.model.TrackInfo;
 import org.mapstruct.Mapper;
@@ -11,4 +12,8 @@ public interface TrackDtoToDomainMapper {
     @IgnoreIdAndAuditInfoMappings
     @Mapping(target = "user", ignore = true)
     TrackInfo trackDtoToTrackInfo(AddTrackDto trackDto);
+
+    @Mapping(target = "id", source = "uuid")
+    @Mapping(target = "uuid", source = "uuid")
+    TrackResponse toTrackResponse(TrackInfo trackInfo);
 }

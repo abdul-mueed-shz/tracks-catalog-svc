@@ -24,6 +24,7 @@ public interface ArtistOfTheDayDomainEntityMapper {
         }
         return User.builder()
                 .id(artistInfo.id())
+                .uuid(artistInfo.uuid())
                 .name(artistInfo.name())
                 .isArtist(true)
                 .build();
@@ -33,6 +34,6 @@ public interface ArtistOfTheDayDomainEntityMapper {
         if (user == null) {
             return null;
         }
-        return new ArtistInfo(user.getId(), user.getName());
+        return new ArtistInfo(user.getId(), user.getUuid(), user.getName());
     }
 }

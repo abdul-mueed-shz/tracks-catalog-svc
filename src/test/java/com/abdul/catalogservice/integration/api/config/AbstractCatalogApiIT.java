@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import java.util.UUID;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -58,8 +60,8 @@ public abstract class AbstractCatalogApiIT extends AbstractIntegrationTest {
                 .build();
     }
 
-    protected Long registerUser(String name, boolean isArtist) {
-        Number id = given().spec(request())
+    protected UUID registerUser(String name, boolean isArtist) {
+        String id = given().spec(request())
                 .contentType("application/json")
                 .body("""
                         {"name":"%s","isArtist":%s}
@@ -71,6 +73,6 @@ public abstract class AbstractCatalogApiIT extends AbstractIntegrationTest {
                 .body("id", notNullValue())
                 .extract()
                 .path("id");
-        return id.longValue();
+        return UUID.fromString(id);
     }
 }

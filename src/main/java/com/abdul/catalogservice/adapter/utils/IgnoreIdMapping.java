@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.CLASS)
 @Mapping(target = "id", ignore = true)
+@Mapping(target = "uuid", ignore = true)
 public @interface IgnoreIdMapping {
 }

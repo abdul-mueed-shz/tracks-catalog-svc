@@ -3,6 +3,7 @@ package com.abdul.catalogservice.adapter.out.persistence.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -23,6 +25,10 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    @Builder.Default
+    private UUID uuid = UUID.randomUUID();
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -30,4 +36,11 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void ensureUuid() {
+        if (this.uuid == null) {
+            this.uuid = UUID.randomUUID();
+        }
+    }
 }

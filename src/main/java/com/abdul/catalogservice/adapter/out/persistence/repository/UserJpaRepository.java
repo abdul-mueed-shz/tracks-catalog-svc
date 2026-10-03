@@ -8,8 +8,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserJpaRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+    Optional<User> findByUuid(UUID uuid);
+
     Optional<User> findFirstByIsArtistTrueAndIdGreaterThanOrderByIdAsc(Long id);
 
     Optional<User> findFirstByIsArtistTrueOrderByIdAsc();

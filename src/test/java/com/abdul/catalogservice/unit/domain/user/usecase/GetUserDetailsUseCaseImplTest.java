@@ -6,6 +6,8 @@ import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
 import org.junit.jupiter.api.Test;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -19,27 +21,29 @@ class GetUserDetailsUseCaseImplTest {
 
     @Test
     void returnsUserDetailsForUserId() {
-        Long userId = 1L;
+        UUID userId = UUID.randomUUID();
         UserInfo userInfo = UserInfo.builder()
-                .id(userId)
+                .id(1L)
+                .uuid(userId)
                 .name("User")
                 .build();
-        when(userRepository.getUserById(userId)).thenReturn(userInfo);
+        when(userRepository.getUserByUuid(userId)).thenReturn(userInfo);
 
         UserInfo result = useCase.execute(userId);
 
         assertThat(result).isSameAs(userInfo);
-        verify(userRepository).getUserById(userId);
+        verify(userRepository).getUserByUuid(userId);
     }
 
     @Test
     void rejectsMissingUser() {
-        when(userRepository.getUserById(1L)).thenReturn(null);
+        UUID userId = UUID.randomUUID();
+        when(userRepository.getUserByUuid(userId)).thenReturn(null);
         UserValidator validator = new UserValidator();
         GetUserDetailsUseCaseImpl validatingUseCase =
                 new GetUserDetailsUseCaseImpl(userRepository, validator);
 
-        assertThatThrownBy(() -> validatingUseCase.execute(1L))
+        assertThatThrownBy(() -> validatingUseCase.execute(userId))
                 .isInstanceOf(com.abdul.catalogservice.domain.common.exception.NotFoundException.class)
                 .hasMessage("User not found.");
     }
