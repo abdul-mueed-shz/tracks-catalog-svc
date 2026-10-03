@@ -25,7 +25,13 @@ scratch/
 **/.terraform/
 *.tfstate
 *.tfstate.*
+*.tfplan
+*.plan
 *.tfvars
 *.tfvars.json
 .terraform.lock.hcl
+**/.terraform.lock.hcl
 **/.terragrunt-cache/
+terragrunt-debug.tfvars.json
+crash.log
+crash.*.log
