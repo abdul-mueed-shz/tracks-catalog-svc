@@ -16,6 +16,39 @@ spring:
     hibernate:
       ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
 
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      password: ${SPRING_DATA_REDIS_PASSWORD:}
+      username: ${SPRING_DATA_REDIS_USERNAME:}
+      database: ${SPRING_DATA_REDIS_DATABASE:0}
+      ssl:
+        enabled: ${SPRING_DATA_REDIS_SSL_ENABLED:false}
+      timeout: ${SPRING_DATA_REDIS_TIMEOUT:2000ms}
+      connect-timeout: ${SPRING_DATA_REDIS_CONNECT_TIMEOUT:2000ms}
+      lettuce:
+        pool:
+          enabled: true
+          max-active: ${SPRING_DATA_REDIS_LETTUCE_POOL_MAX_ACTIVE:16}
+          max-idle: ${SPRING_DATA_REDIS_LETTUCE_POOL_MAX_IDLE:8}
+          min-idle: ${SPRING_DATA_REDIS_LETTUCE_POOL_MIN_IDLE:2}
+          max-wait: ${SPRING_DATA_REDIS_LETTUCE_POOL_MAX_WAIT:1000ms}
+        cluster:
+          refresh:
+            adaptive: ${SPRING_DATA_REDIS_LETTUCE_CLUSTER_REFRESH_ADAPTIVE:true}
+            period: ${SPRING_DATA_REDIS_LETTUCE_CLUSTER_REFRESH_PERIOD:60s}
+
+  cache:
+    type: ${SPRING_CACHE_TYPE:redis}
+    redis:
+      time-to-live: ${SPRING_CACHE_REDIS_TIME_TO_LIVE:1d}
+      cache-null-values: false
+      key-prefix: ${SPRING_CACHE_REDIS_KEY_PREFIX:catalog:}
+      use-key-prefix: true
+
 management:
   endpoints:
     web:
