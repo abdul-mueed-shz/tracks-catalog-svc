@@ -34,6 +34,7 @@ principles.
     - [Running Supporting Services with Docker](#running-supporting-services-with-docker)
     - [Running the Application Locally](#running-the-application-locally)
     - [Running Full Stack with Docker Compose](#running-full-stack-with-docker-compose)
+    - [Deploying Demo to Azure with Terragrunt](#deploying-demo-to-azure-with-terragrunt)
 - [Testing Strategy](#testing-strategy)
 - [Future Scalability & OpenSearch Roadmap](#future-scalability--opensearch-roadmap)
 
@@ -280,6 +281,10 @@ catalog-service/
 ├── Dockerfile                              # Multi-stage container build (Eclipse Temurin JRE 17)
 ├── pom.xml                                 # Maven dependencies and build plugins
 ├── docs/                                   # Architectural diagrams and assignment specs
+├── cloud/                                  # Infrastructure as Code (IaC)
+│   └── iac/
+│       ├── main/                           # Reusable Terraform modules (resource_group, postgresql, redis, container_app, acr)
+│       └── demo/                           # Terragrunt deployment configuration for Azure demo
 └── src/
     ├── main/
     │   ├── java/com/abdul/catalogservice/
@@ -401,6 +406,28 @@ To shut down the full stack:
 ```bash
 docker compose -f docker-compose.dev.yaml down
 ```
+
+### Deploying Demo to Azure with Terragrunt
+
+The project includes production-ready Azure Infrastructure as Code under [`cloud/iac/`](cloud/iac/demo/README.md) designed to minimize Azure credit consumption (~$1/day):
+
+- **Target Architecture**: Azure Container Apps + Managed PostgreSQL 16 Flexible Server + Azure Cache for Redis (Basic C0).
+- **Terragrunt Config**: [`cloud/iac/demo/terragrunt.hcl`](cloud/iac/demo/terragrunt.hcl)
+- **Reusable Modules**: [`cloud/iac/main/modules/`](cloud/iac/main/modules/)
+
+To deploy:
+```bash
+az login
+cd cloud/iac/demo
+terragrunt apply
+```
+
+To destroy when finished (stops credit burn):
+```bash
+terragrunt destroy
+```
+
+See the [Azure IaC Deployment Guide](cloud/iac/demo/README.md) for full endpoint testing instructions and sizing details.
 
 ---
 

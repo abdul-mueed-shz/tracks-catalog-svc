@@ -19,3 +19,13 @@ target/
 
 .DS_Store
 Thumbs.db
+scratch/
+
+# Terraform & Terragrunt
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+**/.terragrunt-cache/
