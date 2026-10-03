@@ -28,6 +28,15 @@ class UpdateUserApiIT extends AbstractCatalogApiIT {
         given().spec(request())
                 .pathParam("userId", artistId)
                 .when()
+                .get("/users/{userId}/aliases")
+                .then()
+                .statusCode(200)
+                .body("size()", equalTo(1))
+                .body("[0].aliasName", equalTo("Original Name"));
+
+        given().spec(request())
+                .pathParam("userId", artistId)
+                .when()
                 .get("/users/{userId}")
                 .then()
                 .statusCode(200)

@@ -9,11 +9,13 @@ import com.abdul.catalogservice.domain.track.port.out.TrackRepository;
 import com.abdul.catalogservice.domain.track.usecase.AddTrackUseCaseImpl;
 import com.abdul.catalogservice.domain.track.usecase.GetTracksUseCaseImpl;
 import com.abdul.catalogservice.domain.user.port.in.GetUserDetailsUseCase;
+import com.abdul.catalogservice.domain.user.port.in.GetUserAliasUseCase;
 import com.abdul.catalogservice.domain.user.port.in.GetUsersUseCase;
 import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import com.abdul.catalogservice.domain.user.port.out.UserRepository;
 import com.abdul.catalogservice.domain.user.usecase.CreateUserUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUserDetailsUseCaseImpl;
+import com.abdul.catalogservice.domain.user.usecase.GetUserAliasUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.GetUsersUseCaseImpl;
 import com.abdul.catalogservice.domain.user.usecase.UpdateUserUseCaseImpl;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +54,15 @@ public class DomainConfig {
     @Bean
     public GetUserDetailsUseCase getUserDetailsUseCase(UserRepository userRepository, UserValidator userValidator) {
         return new GetUserDetailsUseCaseImpl(userRepository, userValidator);
+    }
+
+    @Bean
+    public GetUserAliasUseCase getUserAliasUseCase(
+            UserRepository userRepository,
+            UserAliasRepository userAliasRepository,
+            UserValidator userValidator
+    ) {
+        return new GetUserAliasUseCaseImpl(userRepository, userAliasRepository, userValidator);
     }
 
     @Bean

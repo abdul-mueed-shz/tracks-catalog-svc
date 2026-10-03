@@ -10,6 +10,8 @@ import com.abdul.catalogservice.domain.user.port.out.UserAliasRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class UserAliasRepositoryAdapter implements UserAliasRepository {
@@ -27,5 +29,12 @@ public class UserAliasRepositoryAdapter implements UserAliasRepository {
         User user = userJpaRepository.findById(aliasInfo.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found."));
         return mapper.toDto(userAliasJpaRepository.save(mapper.toEntity(aliasInfo, user)));
+    }
+
+    @Override
+    public List<UserAliasInfo> getAllByUserId(Long userId) {
+        return userAliasJpaRepository.findAllByUser_IdOrderByIdAsc(userId).stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }
